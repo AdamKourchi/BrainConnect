@@ -1,0 +1,116 @@
+<main>
+  <div class="max-w-xl md:max-w-2xl mx-auto mb-20 md:mb-32">
+    <div class="my-9 sm:my-16 md:my-24">
+      <div class="mx-auto max-w-40 md:max-w-52 relative mb-3">
+        <img src="/assets/avatar.png" alt="avatar" class="mx-auto" />
+        <img
+          src="/assets/photo.png"
+          alt="photo"
+          class="absolute -top-2 -right-2 md:right-2 cursor-pointer"
+        />
+      </div>
+
+      <p class="text-base text-center text-white">Tap to change your avatar</p>
+    </div>
+
+    <div class="max-w-5xl px-5 sm:mx-auto">
+      <form
+        [formGroup]="formGroup"
+        (ngSubmit)="onSubmit()"
+        class="relative text-center sm:text-left text-black p-3 sm:p-10 md:p-11 space-y-8 bg-white rounded-md md:rounded-xl"
+      >
+        <h2 class="text-xl mb-10 md:mb-20 font-medium md:text-2xl">
+          Change your infos
+        </h2>
+
+        @if (showMessage) {
+        <p class="absolute top-3 right-10 text-xl font-bold text-[#2ECC40]">
+          Saved Successfully
+        </p>
+
+        }
+
+        <div>
+          <label for="email" class="block mb-2">Email</label>
+          <input
+            type="text"
+            id="email"
+            class="border px-3 py-1 md:py-2 max-w-full w-72"
+            formControlName="email"
+            placeholder="Example@gmail.com"
+          />
+        </div>
+
+        <div>
+          <label for="userName" class="block mb-2">UserName</label>
+          <input
+            type="text"
+            id="userName"
+            class="border px-3 py-1 md:py-2 max-w-full w-72"
+            formControlName="userName"
+            placeholder="user name"
+          />
+        </div>
+
+        <div>
+          <label for="password" class="block mb-2">Password</label>
+          <input
+            type="password"
+            id="password"
+            class="border px-3 py-1 md:py-2 max-w-full w-72"
+            formControlName="password"
+            placeholder="********"
+          />
+        </div>
+
+        <div>
+          <label for="rePassword" class="block mb-2">Repeat Password</label>
+          <input
+            type="password"
+            id="rePassword"
+            class="border px-3 py-1 md:py-2 max-w-full w-72"
+            formControlName="rePassword"
+            placeholder="********"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="bg-[#2ECC40] hover:bg-[#30e045] transition-all px-6 py-2 rounded-md text-white"
+        >
+          Save
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto">
+    <h2
+      class="text-white text-2xl lg:text-3xl xl:text-4xl text-center mb-14 font-medium"
+    >
+      Recent Canvas
+    </h2>
+
+    <div class="flex flex-wrap justify-center gap-10 px-10 select-none">
+      <!-- list canvas -->
+      @for (canva of canvas; track canva.id) {
+      <div>
+        <img [src]="canva.src" alt="" class="rounded-md cursor-pointer" />
+
+        <div class="px-4 py-4 text-white">
+          <div class="flex justify-between mb-2">
+            <p class="text-lg sm:text-xl">{{ canva.name }}</p>
+
+            <!-- replace it with icon -->
+            <button (click)="onDelete(canva.id)" mat-fab>
+              <mat-icon class="text-red-500">delete</mat-icon>
+            </button>
+          </div>
+
+          <p>{{ canva.date }}</p>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</main>

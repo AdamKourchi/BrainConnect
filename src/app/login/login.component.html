@@ -1,10 +1,9 @@
-<section class="container mx-auto flex flex-col justify-center
-items-center px-5 md:flex-row
-sm:px-12 lg:px-20 xl:px-32 h-[calc(100vh-64px)] sm:h-[calc(100vh-64px-1.25rem)]">
+<section
+  class="container mx-auto flex flex-col justify-center items-center px-5 md:flex-row sm:px-12 lg:px-20 xl:px-32 h-[calc(100vh-64px)] sm:h-[calc(100vh-64px-1.25rem)]"
+>
   <div class="imgForm md:w-1/2 flex items-center justify-center">
-    <img class="w-48 md:w-72 xl:w-96" src="assets/login.svg">
+    <img class="w-48 md:w-72 xl:w-96" src="assets/login.svg" />
   </div>
-
 
   <div class="relative py-3 sm:max-w-xs sm:mx-auto">
     <div
@@ -12,17 +11,16 @@ sm:px-12 lg:px-20 xl:px-32 h-[calc(100vh-64px)] sm:h-[calc(100vh-64px-1.25rem)]"
     >
       <div class="flex flex-col justify-center items-center h-full select-none">
         <div class="flex flex-col items-center justify-center gap-2 mb-8">
-
-            <span class=" text-3xl material-symbols-outlined">
-                account_circle
-            </span>
+          <span class="text-3xl material-symbols-outlined">
+            account_circle
+          </span>
 
           <p class="m-0 text-[16px] font-semibold text-gray-900">
             Login to your Account
           </p>
           <span class="m-0 text-xs max-w-[90%] text-center text-[#8B8E98]"
-          >Get started with our app, just start section and enjoy experience.
-        </span>
+            >Get started with our app, just start section and enjoy experience.
+          </span>
         </div>
         <div class="w-full flex flex-col gap-2">
           <label class="font-semibold text-xs text-gray-400">Username</label>
@@ -42,6 +40,7 @@ sm:px-12 lg:px-20 xl:px-32 h-[calc(100vh-64px)] sm:h-[calc(100vh-64px-1.25rem)]"
       </div>
       <div>
         <button
+          (click)="onClick()"
           class="py-1 px-8 bg-[#2ecc40] hover:bg-[#186c22] focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg cursor-pointer select-none"
         >
           Login
@@ -49,13 +48,8 @@ sm:px-12 lg:px-20 xl:px-32 h-[calc(100vh-64px)] sm:h-[calc(100vh-64px-1.25rem)]"
       </div>
     </div>
   </div>
-
 </section>
-
 
 <p class="h-1 bg-[#2ecc40] w-full"></p>
 
-
-<footer class="h-96 bg-white">
-
-</footer>
+<footer class="h-96 bg-white"></footer>
