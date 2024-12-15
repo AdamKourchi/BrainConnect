@@ -1,0 +1,40 @@
+<nav class="container z-50 mx-auto sm:px-12 lg:px-20 xl:px-32">
+  <!-- Logo -->
+  <div class="w-full border-2 sm:mt-5 rounded-none sm:rounded-full border-[#29b13b] h-16 px-5 flex items-center justify-between">
+
+    <div class="logo">
+      <img
+        class="w-10 sm:w-12"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png"
+        alt="Logo"
+      >
+    </div>
+
+    <!-- Links -->
+    <div
+      class="absolute z-10 bg-[#29b13b] sm:bg-transparent
+      rounded-t-none rounded-3xl sm:static links flex items-center
+      left-0 min-h-[20vh] w-full sm:w-fit transition-all duration-300"
+      [ngClass]="{'top-[63.5px]': isOpenHumb, 'top-[-100%]': !isOpenHumb}"
+    >
+      <ul class="flex flex-col gap-2 px-4 sm:flex-row">
+        <li><a routerLink="/" class="mr-3 text-white">Home</a></li>
+        <li><a routerLink="/signup" class="mr-3 text-white">Sign up</a></li>
+        <li><a routerLink="/login" class="mr-3 text-white">Login</a></li>
+        <li><a href="/create" class="mr-3 text-white">Create room</a></li>
+      </ul>
+    </div>
+
+    <!-- Hamburger Icon -->
+    <div class="menuIcon sm:hidden">
+      <span
+        aria-label="menu"
+        name="menu"
+        class="text-white text-3xl cursor-pointer material-symbols-outlined"
+        (click)="openHumburger()"
+      >
+        menu
+      </span>
+    </div>
+  </div>
+</nav>
