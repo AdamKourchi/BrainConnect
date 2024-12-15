@@ -1,11 +1,20 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-home',
+  selector: "app-home",
   imports: [],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  templateUrl: "./home.component.html",
+  styleUrl: "./home.component.css",
 })
 export class HomeComponent {
+  constructor(private router: Router) {}
 
+  NavigateLogin() {
+    this.router.navigate(["login"]);
+  }
+
+  NavigateSignup() {
+    this.router.navigate(["signup"]);
+  }
 }
