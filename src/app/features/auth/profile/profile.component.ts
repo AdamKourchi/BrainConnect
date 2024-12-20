@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { canvasData } from "../Data";
+import { canvasData } from "../../../Data";
 import { MatIconModule } from "@angular/material/icon";
 import { ReactiveFormsModule, FormGroup, FormControl } from "@angular/forms";
 
