@@ -1,49 +1,74 @@
-import {Component, OnInit} from "@angular/core";
-import {Router} from "@angular/router";
-import {UserService} from "../../../core/service/UserService";
-import {FormsModule} from '@angular/forms';
-import {data} from 'autoprefixer';
-import {User} from '../../../core/module/room/User';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {UserService} from '../../../core/service/UserService';
 import {LoginRequest} from '../../../core/service/LoginRequest';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import {HandleErrors} from '../../../core/service/HandleErrors';
 
 @Component({
-  selector: "app-login",
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.css"],
-  imports: [
-    FormsModule
-  ],
-  // Fix styleUrl typo to styleUrls
+  selector: 'app-login',
+  imports: [ReactiveFormsModule],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.css',
 })
-export class LoginComponent implements OnInit {
-  username: string = ""; // Bind to the username input
-  password: string = ""; // Bind to the password input
-
-  dataUser!: User
-
-  constructor(private router: Router, private userService: UserService) {
+export class LoginComponent {
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private handleError: HandleErrors
+  ) {
   }
 
-  login() {
-    const loginRequest: LoginRequest = {
-      email: this.username, // Use the username input for the email field
-      password: this.password,
-    };
+  formGroup = new FormGroup({
+    userName: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+    ]),
+  });
 
-    this.userService.getUserData(loginRequest).then((response) => {
-      if (response.data !== null) {
-        this.dataUser = {
-          ...response.data
-        }
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("data", JSON.stringify(this.dataUser));
-        this.router.navigate(["/create"]);
-      } else {
-        alert("Email or password incorrect");
+
+  error = '';
+
+  onClick() {
+    if (this.formGroup.invalid) {
+      const checkUserName = this.handleError.checkInput(
+        this.formGroup,
+        'userName',
+        'User Name'
+      );
+      const checkPassword = this.handleError.checkInput(
+        this.formGroup,
+        'password',
+        'Password'
+      );
+
+      if (checkUserName) {
+        this.error = checkUserName;
+      } else if (checkPassword) {
+        this.error = checkPassword;
       }
-    });
+    } else {
+
+      const loginRequest: LoginRequest = {
+        email: this.formGroup.value.userName as string,
+        password: this.formGroup.value.password as string,
+      };
+
+      this.userService.getUserData(loginRequest).then((res) => {
+        if (res.data === null) {
+          this.error = 'incorrect user name or password';
+        } else {
+          localStorage.setItem('isLoggedIn', 'true');
+          this.router.navigate(['/create']);
+        }
+      });
+    }
   }
 
-  ngOnInit(): void {
-  }
 }

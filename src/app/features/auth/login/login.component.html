@@ -9,7 +9,10 @@
     <div
       class="min-h-96 px-8 py-6 mt-4 text-left bg-white dark:bg-white rounded-xl shadow-lg"
     >
-      <div class="flex flex-col justify-center items-center h-full select-none">
+      <form
+        [formGroup]="formGroup"
+        class="flex flex-col justify-center items-center h-full select-none"
+      >
         <div class="flex flex-col items-center justify-center gap-2 mb-8">
           <span class="text-3xl material-symbols-outlined">
             account_circle
@@ -19,35 +22,43 @@
             Login to your Account
           </p>
           <span class="m-0 text-xs max-w-[90%] text-center text-[#8B8E98]"
-          >Get started with our app, just start section and enjoy experience.
+            >Get started with our app, just start section and enjoy experience.
           </span>
+          @if(formGroup.invalid){
+          <p class="text-red-500"></p>
+          }
         </div>
+
         <div class="w-full flex flex-col gap-2">
           <label class="font-semibold text-xs text-gray-400">Username</label>
           <input
+            formControlName="userName"
             placeholder="Username"
-            [(ngModel)]="username"
             class="border rounded-lg px-3 py-2 mb-5 text-sm w-full outline-none dark:border-gray-500 dark:bg-white"
           />
         </div>
+
         <div class="w-full flex flex-col gap-2">
           <label class="font-semibold text-xs text-gray-400">Password</label>
           <input
+            formControlName="password"
             placeholder="••••••••"
-            [(ngModel)]="password"
             class="border rounded-lg px-3 py-2 mb-5 text-sm w-full outline-none dark:border-gray-500 dark:bg-white"
             type="password"
           />
         </div>
         <div>
           <button
-            (click)="login()"
+            (click)="onClick()"
+            type="submit"
             class="py-1 px-8 bg-[#2ecc40] hover:bg-[#186c22] focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg cursor-pointer select-none"
           >
             Login
           </button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </section>
+
+<p class="h-1 bg-[#2ecc40] w-full"></p>
