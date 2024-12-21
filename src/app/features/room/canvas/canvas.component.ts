@@ -1,8 +1,11 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as easel from 'createjs-module';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+
 
 @Component({
   selector: 'app-canvas',
+  imports:[NzIconModule],
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.css'],
 })
@@ -11,12 +14,14 @@ import * as easel from 'createjs-module';
 export class CanvasComponent implements AfterViewInit {
   stage: any;
   layer: any;
-  isDrawing: boolean = false;
+  isDrawing: boolean = false;  
+  drawingSelected: boolean = false;
   oldX: number = 0;
   oldY: number = 0;
   strokeColor: string = 'black';
   strokeWidth: number = 5;
   shape: any;
+  textSelected : boolean = false;
 
   ngAfterViewInit(): void {
     const canvas = document.getElementById('canvas') as HTMLCanvasElement;
@@ -57,7 +62,7 @@ export class CanvasComponent implements AfterViewInit {
     });
 
     this.stage.on('stagemousemove', (event: any) => {
-      if (this.isDrawing) {
+      if (this.isDrawing && this.drawingSelected) {
         const newX = event.stageX;
         const newY = event.stageY;
 
@@ -95,5 +100,68 @@ export class CanvasComponent implements AfterViewInit {
 
     // Update the stage
     this.stage.update();
+  }
+
+  handleSelectDraw(){
+    this.drawingSelected = !this.drawingSelected;
+  }
+
+
+  addText(x: number, y: number) {
+    const text = new easel.Text('', '20px Arial', this.strokeColor);
+    text.x = x;
+    text.y = y;
+    text.textBaseline = 'top';
+    this.layer.addChild(text);
+    this.stage.update();
+  
+    // Create a temporary input element to capture text
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.style.position = 'absolute';
+    input.style.left = `${x}px`;
+    input.style.top = `${y}px`;
+    input.style.fontSize = '40px';
+    input.style.color = this.strokeColor;
+    input.focus();
+  
+    // Add input to the DOM
+    document.body.appendChild(input);
+  
+    // Handle text input and cleanup
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        text.text = input.value;
+        this.stage.update();
+        document.body.removeChild(input); // Remove input from DOM
+        this.makeTextMovable(text); // Enable drag-and-drop for this text
+      }
+    });
+  }
+  
+  makeTextMovable(text: any) {
+    text.on('mousedown', (event: any) => {
+      const offsetX = text.x - event.stageX;
+      const offsetY = text.y - event.stageY;
+  
+      // Attach event listeners for dragging
+      this.stage.on('stagemousemove', (moveEvent: any) => {
+        text.x = moveEvent.stageX + offsetX;
+        text.y = moveEvent.stageY + offsetY;
+        this.stage.update();
+      });
+  
+      this.stage.on('stagemouseup', () => {
+        this.stage.off('stagemousemove'); // Detach move listener after mouseup
+        this.stage.off('stagemouseup');
+      });
+    });
+  }
+
+
+  handleSelectText() {
+    this.textSelected = true;
+    this.addText(0,0)
+    this.drawingSelected = false; // Disable drawing mode
   }
 }
