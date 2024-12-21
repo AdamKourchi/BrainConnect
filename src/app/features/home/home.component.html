@@ -1,55 +1,58 @@
-<section
-  class="container-fluid items-center flex justify-evenly sm:justify-between flex-col sm:flex-row mx-auto h-[calc(100vh-64px)] sm:h-[calc(100vh-64px-1.25rem)] bg-[#122023] sm:px-12 lg:px-20 xl:px-32"
->
-  <div
-    class="leftSide flex flex-col sm:w-3/4 gap-4 items-center sm:items-start"
-  >
-    <h1
-      class="text-5xl sm:text-5xl lg:text-7xl xl:text-8xl text-white font-bold"
-    >
-      Brain connect
-    </h1>
-    <p
-      class="text-2xl sm:text-2xl lg:text-3xl xl:text-4xl text-white font-serif"
-    >
-      create together
-    </p>
-  </div>
-  <div class="sm:w-2/4 flex justify-end">
-    <div class="flex flex-col items-center">
-      <button
-        (click)="NavigateLogin()"
-        class="text-white bg-[#2ecc40] py-2 w-32 rounded-lg sm:w-35"
+<div class="h-screen flex justify-center items-center">
+  <section class="container-fluid grid grid-cols-2 gap-4 h-fit">
+    <div class="">
+      <h1
+        class="text-5xl sm:text-5xl lg:text-7xl xl:text-8xl text-white font-urbanist font-semibold"
       >
-        Login
-      </button>
-      <span class="p-2 text-white">Or</span>
-      <button
-        (click)="NavigateSignup()"
-        class="text-white bg-[#2ecc40] py-2 w-32 rounded-lg sm:w-35"
+        Brain Connect
+      </h1>
+      <p
+        class="text-2xl sm:text-2xl lg:text-3xl xl:text-4xl text-white font-mogra"
       >
-        Sign up
-      </button>
+        create together
+      </p>
     </div>
-  </div>
-</section>
+    <div class="">
+      <div class="flex flex-col items-center">
+        <button
+          nz-button
+          class="w-72 bg-[#2ecc40] rounded-md border-none text-white text-xl"
+          (click)="NavigateLogin()"
+        >
+          <nz-icon nzType="download" />
+          Login
+        </button>
+        <span class="p-2 text-white">Or</span>
+
+        <button
+          nz-button
+          class="w-72  bg-[#2ecc40] rounded-md border-none text-white text-xl"
+          (click)="NavigateSignup()"
+        >
+          Sign up
+        </button>
+      </div>
+    </div>
+  </section>
+  <img src="/assets/home/left.png" class="absolute left-0"> 
+  <img src="/assets/home/right.png" class="absolute right-0"> 
+
+</div>
+
 <p class="h-1 bg-[#2ecc40] w-full"></p>
 
-
-  <div class="container-fluid flex justify-content-center py-16 px-5 lg:p-52">
-    <div class="picleft flex items-center">
-      <img
-        class="w-[1500px] hidden lg:block"
-        src="https://compasshealth.ca/assets/images/undraw_collab.svg"
-      />
-    </div>
-    <div class="flex items-center">
-      <h1
-        class="text-white text-2xl xl:text-4xl  text-center font-bold"
-      >
-        "Create Together. Collaborate in real-time on a shared canvas, bringing
-        your team's ideas into focus."
-      </h1>
-    </div>
+<div class="container-fluid flex justify-content-center py-16 px-5 lg:p-52">
+  <div class="picleft flex items-center">
+    <img
+      class="w-[1500px] hidden lg:block"
+      src="https://compasshealth.ca/assets/images/undraw_collab.svg"
+    />
   </div>
+  <div class="flex items-center">
+    <h1 class="text-white text-2xl xl:text-4xl text-center font-bold">
+      "Create Together. Collaborate in real-time on a shared canvas, bringing
+      your team's ideas into focus."
+    </h1>
+  </div>
+</div>
 
