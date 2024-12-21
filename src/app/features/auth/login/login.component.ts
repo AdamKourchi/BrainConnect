@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
-import {UserService} from '../../../core/service/UserService';
+import { UserService } from "../../../core/service/UserService";
 import {LoginRequest} from '../../../core/service/LoginRequest';
 
 @Component({
@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
 
   loginRequest: LoginRequest = {
     email: "3kelhouani@gmail.com",
-    password: "1234567"
+    password: "12345678"
   }
 
 
