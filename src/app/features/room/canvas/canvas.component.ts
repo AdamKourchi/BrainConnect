@@ -7,6 +7,7 @@ import * as easel from 'createjs-module';
   styleUrls: ['./canvas.component.css'],
 })
 
+
 export class CanvasComponent implements AfterViewInit {
   stage: any;
   layer: any;
