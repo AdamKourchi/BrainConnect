@@ -3,3 +3,23 @@
 @tailwind utilities;
 
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@layer base {
+    @font-face {
+      font-family: 'Urbanist';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(assets/fonts/Urbanist/Urbanist-VariableFont_wght.ttf) format('truetype');
+    }
+  }
+
+  @layer base {
+    @font-face {
+      font-family: 'Mogra';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(assets/fonts/Mogra/Mogra-Regular.ttf) format('truetype');
+    }
+  }

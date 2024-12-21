@@ -4,7 +4,13 @@ module.exports = {
     "./src/**/*.{html,ts}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        urbanist: ['Urbanist', 'sans-serif'], 
+        mogra: ['Mogra', 'sans-serif'], 
+
+      },
+    },
   },
   plugins: [],
-}
+};
