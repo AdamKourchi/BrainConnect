@@ -1,10 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {NgClass} from '@angular/common';
-import {
-  RouterLink,
-  Router,
-  NavigationEnd,
-} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { RouterLink, Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-nav-bar',
@@ -13,11 +9,9 @@ import {
   styleUrl: './nav-bar.component.css',
 })
 export class NavBarComponent implements OnInit {
-
   //Hide the Navbar on Editor Page .... Adam Kourchi
 
-  constructor(private router: Router) {
-  }
+  constructor(private router: Router) {}
 
   display = true; // To toggle navbar visibility
 
@@ -38,9 +32,8 @@ export class NavBarComponent implements OnInit {
     console.log(this.isOpenHumb);
   }
 
-
   get isLoggedIn(): boolean {
-    console.log(localStorage.getItem('isLoggedIn') === 'true')
+    console.log(localStorage.getItem('isLoggedIn') === 'true');
     return localStorage.getItem('isLoggedIn') === 'true';
   }
 
@@ -49,6 +42,4 @@ export class NavBarComponent implements OnInit {
     localStorage.removeItem('isLoggedIn');
     this.router.navigate(['/login']);
   }
-
-
 }
