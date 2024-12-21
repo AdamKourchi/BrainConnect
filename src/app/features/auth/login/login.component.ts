@@ -1,11 +1,7 @@
-import { Component } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from '../../../core/service/UserService';
+import { LoginRequest } from '../../../core/service/LoginRequest';
 
 @Component({
   selector: 'app-login',
@@ -13,37 +9,26 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
-  constructor(private router: Router) {}
-
-  forGroup = new FormGroup({
-    userName: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(6),
-    ]),
-  });
-
-  error = '';
+export class LoginComponent implements OnInit {
+  constructor(private router: Router, private userService: UserService) {}
 
   onClick() {
-    console.log(this.forGroup.get('password')?.errors);
-    if (!this.forGroup.valid) {
-      if (
-        this.forGroup.get('userName')?.errors?.['required'] &&
-        this.forGroup.get('password')?.errors?.['required']
-      ) {
-        this.error = 'User name and Password are required';
-      } else if (this.forGroup.get('userName')?.errors?.['email']) {
-        this.error = 'User name is invalid';
+    this.router.navigate(['/profile']);
+  }
+
+  loginRequest: LoginRequest = {
+    email: '3kelhouani@gmail.com',
+    password: '12345678',
+  };
+
+  ngOnInit(): void {
+    this.userService.getUserData(this.loginRequest).then((responce) => {
+      if (responce.data == 1) {
+        localStorage.setItem('isLoggedIn', 'true');
+        this.router.navigate(['/create']);
+      } else {
+        alert('email or password incorrect');
       }
-      // BUG
-      // } else if (this.forGroup.get('password')?.errors?.['required']) {
-      //   this.error = 'Password is required';
-      // } else if (this.forGroup.get('password')?.errors?.['minlength']) {
-      //   this.error = 'Password must be at least 6 characters';
-      // }
-    } else {
-    }
+    });
   }
 }
