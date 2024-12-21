@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
     "@ant-design/icons": "^5.5.2",
+    "axios": "^1.7.9",
     "createjs-module": "^0.8.3",
     "fabric": "^6.5.3",
     "ng-zorro-antd": "^19.0.0",
