@@ -1,58 +1,57 @@
 @if (display) {
-<nav
-  class="container-fluid sm:pt-5 z-50 sm:px-12 lg:px-20 xl:px-32 bg-[#122023] border-1 font-urbanist text-lg"
->
-  <!-- Logo -->
-  <div
-    class="w-full border-2 rounded-none sm:rounded-full border-[#29b13b] h-16 px-5 flex items-center justify-between"
-  >
-    <div class="logo">
-      <a routerLink="/">
+  <nav class="container-fluid sm:pt-5 z-50 sm:px-12 lg:px-20 xl:px-32 bg-[#122023] border-1 font-urbanist text-lg">
+    <!-- Logo -->
+    <div
+      class="w-full border-2 rounded-none sm:rounded-full border-[#29b13b] h-16 px-5 flex items-center justify-between"
+    >
+      <div class="logo">
         <img
           class="w-20"
           src="/assets/home/logo-small-bgGreen.png"
           alt="Logo"
         />
-      </a>
-    </div>
+      </div>
 
-    <!-- Links -->
-    <div
-      class="absolute z-10 bg-[#29b13b] sm:bg-transparent rounded-t-none rounded-3xl sm:static links flex items-center left-0 min-h-[20vh] w-full sm:w-fit transition-all duration-300"
-      [ngClass]="{ 'top-[63.5px]': isOpenHumb, 'top-[-100%]': !isOpenHumb }"
-    >
-      @if (isLoggedIn) {
-      <ul class="flex flex-col gap-2 px-4 sm:flex-row">
-        <li><a routerLink="/profile" class="mr-3 text-white">Profile</a></li>
-        <li><a routerLink="/create" class="mr-3 text-white">Create room</a></li>
-        <li><a routerLink="/editor" class="mr-3 text-white">Editor</a></li>
-        <li>
-          <a routerLink="/login" (click)="logout()" class="mr-3 text-white"
-            >Logout</a
-          >
-        </li>
-      </ul>
-      } @else {
-      <ul class="flex flex-col gap-2 px-4 sm:flex-row">
-        <li><a routerLink="/" class="mr-3 text-white">Home</a></li>
-        <li><a routerLink="/signup" class="mr-3 text-white">Sign up</a></li>
-        <li><a routerLink="/login" class="mr-3 text-white">Login</a></li>
-      </ul>
-      }
-    </div>
-
-    <!-- Hamburger Icon -->
-    <div class="menuIcon sm:hidden">
-      <span
-        aria-label="menu"
-        name="menu"
-        class="text-white text-3xl cursor-pointer material-symbols-outlined"
-        (click)="openHumburger()"
+      <!-- Links -->
+      <div
+        class="absolute z-10 bg-[#29b13b] sm:bg-transparent rounded-t-none rounded-3xl sm:static links flex items-center left-0 min-h-[20vh] w-full sm:w-fit transition-all duration-300"
+        [ngClass]="{ 'top-[63.5px]': isOpenHumb, 'top-[-100%]': !isOpenHumb }"
       >
-        menu
-      </span>
+        @if (isLoggedIn) {
+          <ul class="flex flex-col gap-2 px-4 sm:flex-row items-center">
+
+            <li><a routerLink="/create" class="mr-3 text-white">Create room</a></li>
+            <li><a routerLink="/editor" class="mr-3 text-white">Editor</a></li>
+            <li><a routerLink="/login" (click)="logout()" class="mr-3 text-white">Logout</a></li>
+            <li>
+              <a routerLink="/profile" class="mr-3 text-white">
+                <nz-avatar nzSize="large" nzSrc="{{userData.profilePicture}}" nzIcon="user"></nz-avatar>
+              </a></li>
+
+          </ul>
+        } @else {
+          <ul class="flex flex-col gap-2 px-4 sm:flex-row">
+            <li><a routerLink="/" class="mr-3 text-white">Home</a></li>
+            <li><a routerLink="/signup" class="mr-3 text-white">Sign up</a></li>
+            <li><a routerLink="/login" class="mr-3 text-white">Login</a></li>
+          </ul>
+        }
+
+      </div>
+
+      <!-- Hamburger Icon -->
+      <div class="menuIcon sm:hidden">
+          <span
+            aria-label="menu"
+            name="menu"
+            class="text-white text-3xl cursor-pointer material-symbols-outlined"
+            (click)="openHumburger()"
+          >
+            menu
+          </span>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
 }
+

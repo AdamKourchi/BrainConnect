@@ -1,108 +1,127 @@
-    <div class="h-[calc(100vh-64px)] sm:h-[calc(100vh-5.25rem)]  flex flex-col justify-evenly items-center gap-4 sm:justify-center
+<div class="h-[calc(100vh-64px)] sm:h-[calc(100vh-5.25rem)]  flex flex-col justify-evenly items-center gap-4 sm:justify-center
 container mx-auto sm:px-12 lg:px-20 xl:px-32">
-        <div class="picture cursor-pointer">
-            <div class="relative flex flex-col items-center">
-                <img src="/assets/avatar.png" alt="avatar" class="w-28"/>
-                <img
-                        src="/assets/photo.png"
-                        alt="photo"
-                        class="w-10 absolute right-8 top-[-10px]"
-                />
-            </div>
+  <div class="picture cursor-pointer flex flex-col items-center gap-2">
+    <div class="relative flex flex-col items-center">
+      <nz-avatar [nzSize]="100"
+                 [nzSrc]="avatarUrl?.toString() ? avatarUrl?.toString() : dataUser.profilePicture?.toString()"
+                 nzIcon="user">
+      </nz-avatar>
 
-            <p class="text-base text-white">Tap to change your avatar</p>
-        </div>
-
-        <div class="w-full">
-            <form
-                    [formGroup]="formGroup"
-                    (ngSubmit)="onSubmit()"
-                    class="sm:text-left p-8 mx-5 sm:p-4 sm:mx-20 md:mx-28  lg:mx-52 xl:mx-80 text-black  bg-white rounded-md md:rounded-xl"
-            >
-                <h2 class="text-xl font-medium md:text-2xl">
-                    Change your infos
-                </h2>
-                <div>
-                    <label for="email" class="block mb-2 mt-2">Email</label>
-                    <input
-                            type="text"
-                            id="email"
-                            class="border px-3 py-1 md:py-2 w-full"
-                            formControlName="email"
-                            placeholder="Example@gmail.com"
-                    />
-                </div>
-
-                <div>
-                    <label for="userName" class="block mb-2 mt-2">UserName</label>
-                    <input
-                            type="text"
-                            id="userName"
-                            class="border px-3 py-1 md:py-2 w-full"
-                            formControlName="userName"
-                            placeholder="user name"
-                    />
-                </div>
-
-                <div>
-                    <label for="password" class="block mb-2 mt-2">Password</label>
-                    <input
-                            type="password"
-                            id="password"
-                            class="border px-3 py-1 md:py-2 w-full"
-                            formControlName="password"
-                            placeholder="********"
-                    />
-                </div>
-
-                <div>
-                    <label for="rePassword" class="block mb-2 mt-2  ">Repeat Password</label>
-                    <input
-                            type="password"
-                            id="rePassword"
-                            class="border px-3 py-1 md:py-2 w-full"
-                            formControlName="rePassword"
-                            placeholder="********"
-                    />
-                </div>
-
-                <button
-                        type="submit"
-                        class="bg-[#2ECC40] hover:bg-[#30e045] transition-all mt-5 w-full px-6 py-2 rounded-md text-white"
-                >
-                    Save
-                </button>
-            </form>
-        </div>
+      <nz-upload
+        [nzShowUploadList]="false"
+        class="w-10 absolute right-[-8px] top-[-8px]"
+        (nzChange)="handleChange($event)"
+        [nzHeaders]="{ authorization: 'authorization-text' }"
+      >
+        <button nz-button class="rounded-full">
+          <nz-icon nzType="upload"/>
+        </button>
+      </nz-upload>
     </div>
-    <p class="h-1 bg-[#2ecc40] w-full"></p>
+    <button (click)="handlePicture()" nz-button nzType="primary" class="rounded-full hover:bg-[#30e045]
+    bg-[#2ecc40]
+    border-none ">change
+    </button>
 
-    <div class="mx-auto mt-28 container mx-auto sm:px-12 lg:px-20 xl:px-32">
-        <h2
-                class="text-white text-2xl lg:text-3xl xl:text-4xl text-center mb-14 font-medium"
-        >
-            Recent Canvas
-        </h2>
 
-        <div class="flex flex-wrap justify-center gap-10 mx-5 select-none">
-            <!-- list canvas -->
-            @for (canva of canvas; track canva.id) {
-                <div>
-                    <img [src]="canva.src" alt="" class="rounded-md cursor-pointer"/>
+  </div>
 
-                    <div class="px-4 py-4 text-white">
-                        <div class="flex justify-between mb-2">
-                            <p class="text-lg sm:text-xl">{{ canva.name }}</p>
+  <div class="w-full">
+    <form
+      class="sm:text-left p-8 mx-5 sm:p-4 sm:mx-20 md:mx-28  lg:mx-52 xl:mx-80 text-black  bg-white rounded-md md:rounded-xl"
+    >
+      <h2 class="text-xl font-medium md:text-2xl">
+        Change your infos
+      </h2>
+      <div>
+        <label class="block mb-2 mt-2">Email</label>
 
-                            <!-- replace it with icon -->
-                            <button (click)="onDelete(canva.id)" mat-fab>
-                                <mat-icon class="text-red-500">delete</mat-icon>
-                            </button>
-                        </div>
+        <nz-input-group nzSize="large" [nzSuffix]="suffixIconSearch">
+          <input nz-input type="text"
+                 value="{{dataUser.email}}"
+                 nzSize="large"
+                 disabled="{{isDisbaled}}"
+                 placeholder="User name"
+                 class="px-3 py-1 md:py-2 w-full hover:border-[#2ecc40] "
+          /></nz-input-group>
+        <ng-template #suffixIconSearch>
+          <nz-icon (click)="handleEdit()" class="cursor-pointer" nzType="edit"/>
+        </ng-template>
 
-                        <p>{{ canva.date }}</p>
-                    </div>
-                </div>
-            }
+      </div>
+
+      <div>
+        <label class="block mb-2 mt-2">Username</label>
+
+        <nz-input-group nzSize="large" [nzSuffix]="suffixIconSearch">
+          <input nz-input type="text"
+                 value="{{dataUser.username}}"
+                 nzSize="large"
+                 disabled="{{isDisbaled}}"
+                 placeholder="User name"
+                 class="px-3 py-1 md:py-2 w-full hover:border-[#2ecc40] "
+          /></nz-input-group>
+        <ng-template #suffixIconSearch>
+          <nz-icon (click)="handleEdit()" class="cursor-pointer" nzType="edit"/>
+        </ng-template>
+
+      </div>
+      <div>
+        <label class="block mb-2 mt-2">Password</label>
+        <input nz-input type="text"
+               nzSize="large"
+               placeholder="User name"
+               class="px-3 py-1 md:py-2 w-full hover:border-[#2ecc40] "
+        />
+      </div>
+
+      <div>
+        <label class="block mb-2 mt-2  ">Repeat Password</label>
+        <input nz-input type="text"
+               nzSize="large"
+               placeholder="User name"
+               class="px-3 py-1 md:py-2 w-full hover:border-[#2ecc40] "
+        />
+      </div>
+
+      <button nz-button
+              class="bg-[#2ecc40] transition-all mt-5 w-full rounded-md text-white
+                    hover:text-white border-none hover:bg-[#30e045] hover:"
+              nzType="primary">Save
+      </button>
+    </form>
+  </div>
+</div>
+<p class="h-1 bg-[#2ecc40] w-full"></p>
+
+<div class="mx-auto mt-28 mb-28 container mx-auto sm:px-12 lg:px-20 xl:px-32">
+  <h2
+    class="text-white text-2xl lg:text-3xl xl:text-4xl text-center mb-14 font-medium"
+  >
+    Recent Canvas
+  </h2>
+
+  <div class="flex flex-wrap justify-center gap-10 mx-5 select-none">
+    <!-- list canvas -->
+    @for (canva of dataUser.rooms; track canva.id) {
+      <div routerLink="/editor">
+        <img src="https://img.freepik.com/free-photo/abstract-luxury-gradient-
+        blue-background-smooth-dark-blue-with-black-vignette-studi
+        o-banner_1258-52630.jpg?t=st=1734802845~exp=1734806445~hmac=b8e12898
+        2f468b0f7e8def92d56c87775eff521f3c8b1fed2d0e6026bd9316a2&w=1380" alt="" class="rounded-md cursor-pointer w-72"/>
+
+        <div class="py-4 text-white">
+          <div class="flex justify-between mb-2">
+            <p class="text-lg sm:text-xl">{{ canva.design }}</p>
+
+            <!-- replace it with icon -->
+            <button (click)="onDelete(canva.codeRoom)" mat-fab>
+              <mat-icon class="text-red-500">delete</mat-icon>
+            </button>
+          </div>
+
         </div>
-    </div>
+      </div>
+    }
+  </div>
+</div>

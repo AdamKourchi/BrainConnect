@@ -1,20 +1,23 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import axios from 'axios';
-import { LoginRequest } from './LoginRequest';
+import {User} from '../module/room/User';
+import {LoginRequest} from './LoginRequest';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class UserService {
+
   private apiUrl = 'http://localhost:8080/users/';
 
-  constructor() {}
-
-  getUserData(login: LoginRequest) {
-    return axios.post(this.apiUrl + 'login', login);
+  constructor() {
   }
 
-  saveUserData(user: any) {
-    return axios.post(this.apiUrl + 'signup', user);
+  getUserData(login: LoginRequest) {
+    return axios.get(this.apiUrl + 'login/email/' + login.email + '/pass/' + login.password)
+  }
+
+  saveUser(user: User) {
+    return axios.post(this.apiUrl + 'save', user)
   }
 }

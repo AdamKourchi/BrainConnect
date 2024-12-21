@@ -1,17 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { NgClass } from '@angular/common';
-import { RouterLink, Router, NavigationEnd } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {NgClass} from '@angular/common';
+import {
+  RouterLink,
+  Router,
+  NavigationEnd,
+} from '@angular/router';
+import {NzAvatarComponent} from 'ng-zorro-antd/avatar';
+import {User} from '../../../core/module/room/User';
 
 @Component({
   selector: 'app-nav-bar',
-  imports: [NgClass, RouterLink],
+  imports: [NgClass, RouterLink, NzAvatarComponent],
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css',
 })
 export class NavBarComponent implements OnInit {
-  //Hide the Navbar on Editor Page .... Adam Kourchi
 
-  constructor(private router: Router) {}
+  userData!: User
+
+  constructor(private router: Router) {
+  }
 
   display = true; // To toggle navbar visibility
 
@@ -23,17 +31,29 @@ export class NavBarComponent implements OnInit {
         this.display = event.urlAfterRedirects !== '/editor';
       }
     });
+
+
+    const storedData = localStorage.getItem("data");
+    if (storedData) {
+      try {
+        const parsedData: User = JSON.parse(storedData);
+        this.userData = parsedData
+
+      } catch (error) {
+      }
+    } else {
+      console.warn("No data found in localStorage.");
+    }
   }
 
   isOpenHumb = false;
 
   openHumburger() {
     this.isOpenHumb = !this.isOpenHumb;
-    console.log(this.isOpenHumb);
   }
 
+
   get isLoggedIn(): boolean {
-    console.log(localStorage.getItem('isLoggedIn') === 'true');
     return localStorage.getItem('isLoggedIn') === 'true';
   }
 
@@ -42,4 +62,6 @@ export class NavBarComponent implements OnInit {
     localStorage.removeItem('isLoggedIn');
     this.router.navigate(['/login']);
   }
+
+
 }
