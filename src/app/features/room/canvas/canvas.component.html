@@ -41,9 +41,8 @@
 
 
 
-      <button (click)="handleSelectErase()" class="mx-10">
-        <nz-icon nzType="bg-colors" nzTheme="outline" class="text-2xl" />
-      
+      <button (click)="handleColorChange()" class="mx-10">
+        <nz-color-picker (ngModel)]="strokeColor" id="colorPicker"></nz-color-picker>
       </button>
 
 

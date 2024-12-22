@@ -1,10 +1,11 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as easel from 'createjs-module';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzColorPickerComponent } from 'ng-zorro-antd/color-picker';
 
 @Component({
   selector: 'app-canvas',
-  imports: [NzIconModule],
+  imports: [NzIconModule,NzColorPickerComponent],
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.css'],
 })
@@ -189,5 +190,11 @@ export class CanvasComponent implements AfterViewInit {
   handleSelectErase() {
     this.erasingSelected = !this.erasingSelected;
     this.drawingSelected = false; // Disable drawing mode
+  }
+
+  handleColorChange(){
+    
+    console.log(this.strokeColor);
+    
   }
 }
