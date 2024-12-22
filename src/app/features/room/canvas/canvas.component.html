@@ -1,8 +1,7 @@
-<nav class="w-100 h-2 bg-[#122023]"></nav>
 <canvas id="canvas"></canvas>
 
 <div
-  class="absolute bottom-0 h-10 bg-white w-10/12 rounded-lg border-2 border-black left-1/2 transform -translate-x-1/2 flex items-center"
+  class="absolute bottom-1 h-10 bg-white w-10/12 rounded-lg border-2 border-black left-1/2 transform -translate-x-1/2 flex items-center"
 >
   <div class="flex justify-between w-full">
     <div class="flex justify-start mx-10">
@@ -41,9 +40,9 @@
 
 
 
-      <button (click)="handleColorChange()" class="mx-10">
-        <nz-color-picker (ngModel)]="strokeColor" id="colorPicker"></nz-color-picker>
-      </button>
+        <button (click)="handleColorChange()" class="mx-10">
+          <nz-color-picker [(ngModel)]="strokeColor" ></nz-color-picker>
+        </button>
 
 
       

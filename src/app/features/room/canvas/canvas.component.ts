@@ -2,10 +2,11 @@ import { Component, AfterViewInit } from '@angular/core';
 import * as easel from 'createjs-module';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzColorPickerComponent } from 'ng-zorro-antd/color-picker';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-canvas',
-  imports: [NzIconModule,NzColorPickerComponent],
+  imports: [NzIconModule,NzColorPickerComponent,FormsModule],
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.css'],
 })
@@ -18,6 +19,7 @@ export class CanvasComponent implements AfterViewInit {
   oldX: number = 0;
   oldY: number = 0;
   strokeColor: string = 'black';
+  
   strokeWidth: number = 5;
   shape: any;
   textSelected: boolean = false;

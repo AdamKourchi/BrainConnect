@@ -6,5 +6,6 @@ html {
   width: 100%;
 }
 canvas{
+  height: 100vh;
   background-image: url("/assets/editor/EditorBackground.png");
 }

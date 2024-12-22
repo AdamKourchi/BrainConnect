@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CanvasComponent } from '../canvas/canvas.component';
 
+
 @Component({
   selector: 'app-editor',
   imports: [CanvasComponent],
@@ -10,7 +11,5 @@ import { CanvasComponent } from '../canvas/canvas.component';
 export class EditorComponent {
   constructor () { 
   }
-  editor = true;
-
- 
+  editor = true; 
 }
