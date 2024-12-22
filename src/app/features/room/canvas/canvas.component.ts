@@ -13,6 +13,7 @@ export class CanvasComponent implements AfterViewInit {
   layer: any;
   isDrawing: boolean = false;
   drawingSelected: boolean = false;
+  erasingSelected: boolean = false;
   oldX: number = 0;
   oldY: number = 0;
   strokeColor: string = 'black';
@@ -43,14 +44,14 @@ export class CanvasComponent implements AfterViewInit {
     this.shape = new easel.Shape();
     this.layer.addChild(this.shape);
 
-    // Initialize drawing
-    this.initializeDrawing();
+    // Initialize drawing and eraser
+    this.initializeDrawingErase();
 
     // Add background or initial UI setup if needed
     this.stage.update();
   }
 
-  initializeDrawing() {
+  initializeDrawingErase() {
     // Pencil drawing event handlers
     this.stage.on('stagemousedown', (event: any) => {
       this.isDrawing = true;
@@ -59,15 +60,25 @@ export class CanvasComponent implements AfterViewInit {
     });
 
     this.stage.on('stagemousemove', (event: any) => {
-      if (this.isDrawing && this.drawingSelected) {
+      if (this.isDrawing) {
         const newX = event.stageX;
         const newY = event.stageY;
 
-        this.shape.graphics
-          .setStrokeStyle(this.strokeWidth)
-          .beginStroke(this.strokeColor)
-          .moveTo(this.oldX, this.oldY)
-          .lineTo(newX, newY);
+        if (this.drawingSelected) {
+          // Drawing mode
+          this.shape.graphics
+            .setStrokeStyle(this.strokeWidth)
+            .beginStroke(this.strokeColor)
+            .moveTo(this.oldX, this.oldY)
+            .lineTo(newX, newY);
+        } else if (this.erasingSelected) {
+          // Erasing mode
+          this.shape.graphics
+            .setStrokeStyle(25)
+            .beginStroke('white')
+            .moveTo(this.oldX, this.oldY)
+            .lineTo(newX, newY);
+        }
 
         this.oldX = newX;
         this.oldY = newY;
@@ -79,9 +90,6 @@ export class CanvasComponent implements AfterViewInit {
     this.stage.on('stagemouseup', () => {
       this.isDrawing = false;
     });
-
-    // Enable mouse interactions
-    this.stage.enableMouseOver();
   }
 
   clearCanvas() {
@@ -93,7 +101,7 @@ export class CanvasComponent implements AfterViewInit {
     this.layer.addChild(this.shape);
 
     // Reinitialize the drawing logic
-    this.initializeDrawing();
+    this.initializeDrawingErase();
 
     // Update the stage
     this.stage.update();
@@ -101,28 +109,21 @@ export class CanvasComponent implements AfterViewInit {
 
   handleSelectDraw() {
     this.drawingSelected = !this.drawingSelected;
+    this.erasingSelected = false; // Disable eraser mode
   }
 
-  addText(x: number, y: number) {
-    const text = new easel.Text('', 'bold 40px Arial', this.strokeColor); // Make it bold
-    text.x = x;
-    text.y = y;
+  addText() {
+    const text = new easel.Text('', 'bold 40px Arial', this.strokeColor);
+
+    const stageWidth = this.stage.canvas.width;
+    const stageHeight = this.stage.canvas.height;
+
+    // Center the text on the stage
+    text.x = stageWidth / 2;
+    text.y = stageHeight / 2;
+
     text.textBaseline = 'top';
-
-    // Add a transparent rectangle for selection
-    const rect = new easel.Shape();
-    rect.graphics
-      .beginFill('rgba(0, 0, 0, 0)') // Transparent fill
-      .drawRect(
-        text.x,
-        text.y,
-        text.getMeasuredWidth(),
-        text.getMeasuredHeight()
-      );
-    rect.cursor = 'pointer'; // Make it easier to select with a cursor change
-
-    this.layer.addChild(rect); // Add the rectangle for interaction
-    this.layer.addChild(text); // Add the text above the rectangle
+    this.layer.addChild(text);
     this.stage.update();
 
     // Create a temporary input element to capture text
@@ -131,11 +132,11 @@ export class CanvasComponent implements AfterViewInit {
     input.style.position = 'absolute';
     input.style.left = '50%';
     input.style.top = '50%';
-    input.style.transform = 'translate(-50%, -50%)'; // Center the element
-    input.style.border = '2px solid black'; // Add a border
-    input.style.borderRadius = '8px'; // Add border radius
-    input.style.padding = '10px'; // Optional: Add padding for better appearance
-    input.placeholder = 'Enter text here...'; // Add grayed-out placeholder
+    input.style.transform = 'translate(-50%, -50%)';
+    input.style.border = '2px solid black';
+    input.style.borderRadius = '8px';
+    input.style.padding = '10px';
+    input.placeholder = 'Enter text here...';
     input.id = 'input-message';
 
     input.style.fontSize = '40px';
@@ -147,15 +148,15 @@ export class CanvasComponent implements AfterViewInit {
     // Add input to the DOM
     foundInput == null
       ? document.body.appendChild(input)
-      :   foundInput.parentNode?.removeChild(foundInput); // Remove using its parent
+      : document.body.removeChild(foundInput);
 
     // Handle text input and cleanup
     input.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
         text.text = input.value;
         this.stage.update();
-        document.body.removeChild(input); // Remove input from DOM
-        this.makeTextMovable(text); // Enable drag-and-drop for this text
+        document.body.removeChild(input);
+        this.makeTextMovable(text);
       }
     });
   }
@@ -180,7 +181,13 @@ export class CanvasComponent implements AfterViewInit {
 
   handleSelectText() {
     this.textSelected = true;
-    this.addText(0, 0);
+    this.addText();
+    this.drawingSelected = false; // Disable drawing mode
+    this.erasingSelected = false; // Disable eraser mode
+  }
+
+  handleSelectErase() {
+    this.erasingSelected = !this.erasingSelected;
     this.drawingSelected = false; // Disable drawing mode
   }
 }

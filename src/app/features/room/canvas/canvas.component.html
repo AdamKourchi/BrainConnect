@@ -4,29 +4,54 @@
 <div
   class="absolute bottom-0 h-10 bg-white w-10/12 rounded-lg border-2 border-black left-1/2 transform -translate-x-1/2 flex items-center"
 >
-  <div class="flex justify-evenly w-full">
-    <div class="flex">
+  <div class="flex justify-between w-full">
+    <div class="flex justify-start mx-10">
       @if(this.drawingSelected){
 
       <button
         (click)="handleSelectDraw()"
-        class="border-2 border-black rounded-md"
+        class="border-2 border-black rounded-md mx-10"
       >
         <nz-icon nzType="edit" nzTheme="fill" class="text-2xl" />
       </button>
       }@else {
-      <button (click)="handleSelectDraw()">
+      <button (click)="handleSelectDraw()" class="mx-10">
         <nz-icon nzType="edit" nzTheme="fill" class="text-2xl" />
       </button>
       }
 
-      <button (click)="handleSelectText()">
+      <button (click)="handleSelectText()" class="mx-10">
         <nz-icon nzType="file-word" nzTheme="fill" class="text-2xl" />
       </button>
+
+
+    
+      @if(this.erasingSelected){
+
+        <button (click)="handleSelectErase()" class="mx-10 border-2 border-black rounded-md">
+          <nz-icon nzType="clear" nzTheme="outline"  class="text-2xl" /> 
+        
+        </button>
+        }@else {
+          <button (click)="handleSelectErase()" class="mx-10">
+            <nz-icon nzType="clear" nzTheme="outline"  class="text-2xl" /> 
+          
+          </button>
+        }
+
+
+
+      <button (click)="handleSelectErase()" class="mx-10">
+        <nz-icon nzType="bg-colors" nzTheme="outline" class="text-2xl" />
+      
+      </button>
+
+
+      
     </div>
 
     <div class="flex">
-      <button (click)="clearCanvas()">
+      <button (click)="clearCanvas()" class="mx-10">
         <nz-icon nzType="delete" nzTheme="fill" class="text-2xl"></nz-icon>
       </button>
     </div>
