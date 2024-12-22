@@ -14,10 +14,10 @@ import { FormsModule } from '@angular/forms';
 import { provideHttpClient } from '@angular/common/http';
 import { provideNzIcons } from 'ng-zorro-antd/icon';
 import { IconDefinition } from '@ant-design/icons-angular';
-import {YoutubeFill, FacebookFill,InstagramFill,LinkedinFill, DeleteFill, FileWordFill } from '@ant-design/icons-angular/icons';
+import {YoutubeFill, FacebookFill,InstagramFill,LinkedinFill, DeleteFill, FileWordFill, ClearOutline } from '@ant-design/icons-angular/icons';
 
 
-const icons: IconDefinition[] = [YoutubeFill, FacebookFill,InstagramFill,LinkedinFill,DeleteFill,FileWordFill];
+const icons: IconDefinition[] = [YoutubeFill, FacebookFill,InstagramFill,LinkedinFill,DeleteFill,FileWordFill,ClearOutline];
 
 registerLocaleData(en);
 
