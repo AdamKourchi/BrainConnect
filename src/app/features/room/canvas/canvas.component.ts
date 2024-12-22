@@ -104,23 +104,35 @@ export class CanvasComponent implements AfterViewInit {
 
   handleSelectDraw(){
     this.drawingSelected = !this.drawingSelected;
+    
   }
 
 
   addText(x: number, y: number) {
-    const text = new easel.Text('', '20px Arial', this.strokeColor);
+    const text = new easel.Text('', 'bold 40px Arial', this.strokeColor); // Make it bold
     text.x = x;
     text.y = y;
     text.textBaseline = 'top';
-    this.layer.addChild(text);
+    
+    // Add a transparent rectangle for selection
+    const rect = new easel.Shape();
+    rect.graphics.beginFill('rgba(0, 0, 0, 0)') // Transparent fill
+        .drawRect(text.x, text.y, text.getMeasuredWidth(), text.getMeasuredHeight());
+    rect.cursor = 'pointer'; // Make it easier to select with a cursor change
+    
+    this.layer.addChild(rect); // Add the rectangle for interaction
+    this.layer.addChild(text); // Add the text above the rectangle
     this.stage.update();
+    
   
     // Create a temporary input element to capture text
     const input = document.createElement('input');
     input.type = 'text';
     input.style.position = 'absolute';
-    input.style.left = `${x}px`;
-    input.style.top = `${y}px`;
+    // input.style.left = `${x}px`;
+    // input.style.top = `${y}px`;
+    input.style.bottom = `0px`;
+
     input.style.fontSize = '40px';
     input.style.color = this.strokeColor;
     input.focus();
@@ -135,6 +147,7 @@ export class CanvasComponent implements AfterViewInit {
         this.stage.update();
         document.body.removeChild(input); // Remove input from DOM
         this.makeTextMovable(text); // Enable drag-and-drop for this text
+
       }
     });
   }
@@ -145,15 +158,15 @@ export class CanvasComponent implements AfterViewInit {
       const offsetY = text.y - event.stageY;
   
       // Attach event listeners for dragging
-      this.stage.on('stagemousemove', (moveEvent: any) => {
+    let listener =  this.stage.on('stagemousemove', (moveEvent: any) => {
         text.x = moveEvent.stageX + offsetX;
         text.y = moveEvent.stageY + offsetY;
         this.stage.update();
       });
   
       this.stage.on('stagemouseup', () => {
-        this.stage.off('stagemousemove'); // Detach move listener after mouseup
-        this.stage.off('stagemouseup');
+        this.stage.off('stagemousemove',listener);
+       
       });
     });
   }
