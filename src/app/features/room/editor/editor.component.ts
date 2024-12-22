@@ -8,9 +8,7 @@ import { CanvasComponent } from '../canvas/canvas.component';
   styleUrl: './editor.component.css'
 })
 export class EditorComponent {
-  constructor () { 
+  constructor () {
   }
   editor = true;
-
- 
 }

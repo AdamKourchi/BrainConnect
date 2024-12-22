@@ -1,11 +1,18 @@
-import { Component, AfterViewInit } from '@angular/core';
+import {Component, AfterViewInit} from '@angular/core';
 import * as easel from 'createjs-module';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzColorPickerComponent } from 'ng-zorro-antd/color-picker';
+import {NzIconModule} from 'ng-zorro-antd/icon';
+import {NzColorBlockComponent, NzColorPickerComponent} from 'ng-zorro-antd/color-picker';
+import {FormsModule} from '@angular/forms';
+import {Menubar} from 'primeng/menubar';
+import {NzButtonComponent, NzButtonModule} from 'ng-zorro-antd/button';
+import {NzSpaceCompactComponent} from 'ng-zorro-antd/space';
+import {NgClass} from '@angular/common';
+import {Toast} from 'primeng/toast';
+import {Button} from 'primeng/button';
 
 @Component({
   selector: 'app-canvas',
-  imports: [NzIconModule,NzColorPickerComponent],
+  imports: [NzIconModule, NzColorPickerComponent, FormsModule, Menubar, NzButtonComponent, NzColorBlockComponent, NzButtonModule, NzSpaceCompactComponent, NgClass, Toast, Button],
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.css'],
 })
@@ -40,6 +47,11 @@ export class CanvasComponent implements AfterViewInit {
     this.stage = new easel.Stage('canvas');
     this.layer = new easel.Container();
     this.stage.addChild(this.layer);
+
+    //remove style={}
+    const canvasElement = this.stage.canvas;
+    canvasElement.removeAttribute("style");
+
 
     // Create a new shape for drawing
     this.shape = new easel.Shape();
@@ -106,11 +118,6 @@ export class CanvasComponent implements AfterViewInit {
 
     // Update the stage
     this.stage.update();
-  }
-
-  handleSelectDraw() {
-    this.drawingSelected = !this.drawingSelected;
-    this.erasingSelected = false; // Disable eraser mode
   }
 
   addText() {
@@ -180,21 +187,51 @@ export class CanvasComponent implements AfterViewInit {
     });
   }
 
+
+
+  handleColorChange() {
+    console.log(this.strokeColor);
+  }
+
   handleSelectText() {
-    this.textSelected = true;
-    this.addText();
-    this.drawingSelected = false; // Disable drawing mode
-    this.erasingSelected = false; // Disable eraser mode
+    // Deselect other modes
+    this.drawingSelected = false;
+    this.erasingSelected = false;
+
+    // Toggle text mode
+    this.textSelected = !this.textSelected;
+
+    // If text mode is activated, add text to the canvas
+    if (this.textSelected) {
+      this.addText();
+    }
+  }
+
+  handleSelectDraw() {
+    // Deselect other modes
+    this.textSelected = false;
+    this.erasingSelected = false;
+
+    // Toggle drawing mode
+    this.drawingSelected = !this.drawingSelected;
   }
 
   handleSelectErase() {
+    // Deselect other modes
+    this.textSelected = false;
+    this.drawingSelected = false;
+
+    // Toggle eraser mode
     this.erasingSelected = !this.erasingSelected;
-    this.drawingSelected = false; // Disable drawing mode
   }
 
-  handleColorChange(){
-    
-    console.log(this.strokeColor);
-    
-  }
+
+
+
+
+
+
+
+
+
 }
