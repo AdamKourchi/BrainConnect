@@ -1,64 +1,86 @@
-<section
-  class="container mx-auto flex flex-col justify-center items-center px-5 md:flex-row sm:px-12 lg:px-20 xl:px-32 h-[calc(100vh-64px)] sm:h-[calc(100vh-64px-1.25rem)]"
->
-  <div class="imgForm md:w-1/2 flex items-center justify-center">
-    <img class="w-48 md:w-72 xl:w-96" src="assets/login.svg" />
-  </div>
-
-  <div class="relative py-3 sm:max-w-xs sm:mx-auto">
-    <div
-      class="min-h-96 px-8 py-6 mt-4 text-left bg-white dark:bg-white rounded-xl shadow-lg"
-    >
-      <form
-        [formGroup]="formGroup"
-        class="flex flex-col justify-center items-center h-full select-none"
-      >
-        <div class="flex flex-col items-center justify-center gap-2 mb-8">
-          <span class="text-3xl material-symbols-outlined">
-            account_circle
-          </span>
-
-          <p class="m-0 text-[16px] font-semibold text-gray-900">
-            Login to your Account
-          </p>
-          <span class="m-0 text-xs max-w-[90%] text-center text-[#8B8E98]"
-            >Get started with our app, just start section and enjoy experience.
-          </span>
-          @if(formGroup.invalid){
-          <p class="text-red-500"></p>
-          }
-        </div>
-
-        <div class="w-full flex flex-col gap-2">
-          <label class="font-semibold text-xs text-gray-400">Username</label>
-          <input
-            formControlName="userName"
-            placeholder="Username"
-            class="border rounded-lg px-3 py-2 mb-5 text-sm w-full outline-none dark:border-gray-500 dark:bg-white"
-          />
-        </div>
-
-        <div class="w-full flex flex-col gap-2">
-          <label class="font-semibold text-xs text-gray-400">Password</label>
-          <input
-            formControlName="password"
-            placeholder="••••••••"
-            class="border rounded-lg px-3 py-2 mb-5 text-sm w-full outline-none dark:border-gray-500 dark:bg-white"
-            type="password"
-          />
-        </div>
-        <div>
-          <button
-            (click)="onClick()"
-            type="submit"
-            class="py-1 px-8 bg-[#2ecc40] hover:bg-[#186c22] focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg cursor-pointer select-none"
-          >
-            Login
-          </button>
-        </div>
-      </form>
+<nz-spin nzTip="Loading..." [nzSpinning]="isSpinning">
+  <section
+    class="container mx-auto flex flex-col justify-center items-center px-5 md:flex-row sm:px-12 lg:px-20 xl:px-32 h-[calc(100vh-64px)] sm:h-[calc(100vh-64px-1.25rem)]"
+  >
+    <div class="imgForm md:w-1/2 flex items-center justify-center">
+      <img class="w-48 md:w-72 xl:w-96" src="assets/login.svg" />
     </div>
-  </div>
-</section>
 
-<p class="h-1 bg-[#2ecc40] w-full"></p>
+    <div class="relative py-3 sm:max-w-xs sm:mx-auto">
+      <div
+        class="min-h-96 px-8 py-6 mt-4 text-left bg-white dark:bg-white rounded-xl shadow-lg"
+      >
+        <form
+          [formGroup]="formGroup"
+          (submit)="onSubmit()"
+          class="flex flex-col justify-center items-center h-full select-none"
+        >
+          <div class="flex flex-col items-center justify-center gap-2 mb-8">
+            <span class="text-3xl material-symbols-outlined">
+              account_circle
+            </span>
+
+            <p class="m-0 text-[16px] font-semibold text-gray-900">
+              Login to your Account
+            </p>
+            <span class="m-0 text-xs max-w-[90%] text-center text-[#8B8E98]"
+              >Get started with our app, just start section and enjoy
+              experience.
+            </span>
+            @if(error){
+            <p class="text-red-500">{{ error }}</p>
+            }
+          </div>
+
+          <div class="w-full flex flex-col gap-2">
+            <label class="font-semibold text-xs text-gray-500">Username</label>
+            <input
+              formControlName="email"
+              placeholder="Username"
+              class="border rounded-lg px-3 py-2 mb-5 text-sm w-full outline-none dark:border-gray-500 dark:bg-white"
+            />
+          </div>
+
+          <div class="w-full flex flex-col gap-2">
+            <label class="font-semibold text-xs text-gray-500">Password</label>
+            <input
+              formControlName="password"
+              placeholder="••••••••"
+              class="border rounded-lg px-3 py-2 mb-5 text-sm w-full outline-none dark:border-gray-500 dark:bg-white"
+              type="password"
+            />
+          </div>
+
+          <label nz-checkbox class="w-full text-gray-500 mb-4"
+            >Stay logged in.</label
+          >
+
+          <div>
+            <button
+              type="submit"
+              class="py-1 px-8 bg-[#2ecc40] hover:bg-[#186c22] focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg cursor-pointer select-none"
+            >
+              Login
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <ng-template #template>
+    <div class="ant-notification-notice-content">
+      <div class="ant-notification-notice-with-icon">
+        <span class="ant-notification-notice-icon">
+          <nz-icon nzType="smile" style="color: rgb(16, 142, 233)" />
+        </span>
+        <div class="ant-notification-notice-message">Welcome Back</div>
+        <div class="ant-notification-notice-description">
+          Logged in Successfully
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <p class="h-1 bg-[#2ecc40] w-full"></p>
+</nz-spin>

@@ -7,8 +7,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { LoginRequest } from '../../../core/service/LoginRequest';
 import { HandleErrors } from '../../../core/service/HandleErrors';
+import { SignupRequest } from '../../../core/service/SignupRequest';
 
 @Component({
   selector: 'app-signup',
@@ -32,7 +32,7 @@ export class SignupComponent {
       Validators.required,
       Validators.minLength(6),
     ]),
-    userName: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(6),
@@ -41,7 +41,7 @@ export class SignupComponent {
 
   error = '';
 
-  onClick() {
+  onSubmit() {
     if (this.formGroup.invalid) {
       for (let key in this.formGroup.value) {
         const checkInput = this.handleError.checkInput(
@@ -55,14 +55,15 @@ export class SignupComponent {
         }
       }
     } else {
-      // 1 or -1
-      // this.userService.saveUserData(this.formGroup.value).then((res) => {
-      //   if (res.data === -1) {
-      //     this.error = 'User With this email already exist';
-      //   } else {
-      //     this.router.navigate(['/create']);
-      //   }
-      // });
+      this.userService
+        .save(this.formGroup.value as SignupRequest)
+        .then((res) => {
+          if (res.data === '') {
+            this.error = 'User With this username already exist';
+          } else {
+            this.router.navigate(['/create']);
+          }
+        });
     }
   }
 }
