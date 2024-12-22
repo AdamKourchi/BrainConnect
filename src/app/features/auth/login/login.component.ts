@@ -65,6 +65,7 @@ export class LoginComponent implements OnInit {
           this.error = 'incorrect user name or password';
         } else {
           localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('data', JSON.stringify(res.data));
           this.router.navigate(['/create']);
         }
       });
@@ -79,9 +80,7 @@ export class LoginComponent implements OnInit {
     if (this.isLoggedIn) {
       this.router.navigate(['/create']);
     } else {
-
     }
-
   }
 
 }

@@ -104,6 +104,25 @@ container mx-auto sm:px-12 lg:px-20 xl:px-32">
   <div class="flex flex-wrap justify-center gap-10 mx-5 select-none">
     <!-- list canvas -->
     @for (canva of dataUser.rooms; track canva.id) {
+
+
+      <nz-card style="width:300px;" [nzCover]="coverTemplate" [nzActions]="[actionEdit ,actionDelete]">
+        <nz-card-meta
+          nzTitle="{{canva.design }}"
+          nzDescription="This is the description"
+        ></nz-card-meta>
+      </nz-card>
+      <ng-template #coverTemplate>
+        <img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"/>
+      </ng-template>
+      <ng-template #actionEdit>
+        <nz-icon nzType="edit"/>
+      </ng-template>
+      <ng-template #actionDelete>
+        <nz-icon nzType="delete" (click)="onDelete(canva.codeRoom)"/>
+      </ng-template>
+
+
       <div routerLink="/editor">
         <img src="https://img.freepik.com/free-photo/abstract-luxury-gradient-
         blue-background-smooth-dark-blue-with-black-vignette-studi
@@ -112,10 +131,10 @@ container mx-auto sm:px-12 lg:px-20 xl:px-32">
 
         <div class="py-4 text-white">
           <div class="flex justify-between mb-2">
-            <p class="text-lg sm:text-xl">{{ canva.design }}</p>
+            <p class="text-lg sm:text-xl"></p>
 
             <!-- replace it with icon -->
-            <button (click)="onDelete(canva.codeRoom)" mat-fab>
+            <button  mat-fab>
               <mat-icon class="text-red-500">delete</mat-icon>
             </button>
           </div>

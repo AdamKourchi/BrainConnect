@@ -3,18 +3,19 @@ import {MatIconModule} from "@angular/material/icon";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NzAvatarComponent} from 'ng-zorro-antd/avatar';
 import {User} from '../../../core/module/room/User';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {NzInputDirective, NzInputGroupComponent} from 'ng-zorro-antd/input';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzUploadChangeParam, NzUploadComponent} from 'ng-zorro-antd/upload';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {UserService} from '../../../core/service/UserService';
+import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
 
 @Component({
   selector: "app-profile",
   imports: [
     MatIconModule, ReactiveFormsModule, NzAvatarComponent, RouterLink,
-    NzInputDirective, NzButtonComponent, NzUploadComponent, NzIconDirective, NzInputGroupComponent
+    NzInputDirective, NzButtonComponent, NzUploadComponent, NzIconDirective, NzInputGroupComponent, NzCardComponent, NzCardMetaComponent
   ],
   templateUrl: "./profile.component.html",
   styleUrls: ["./profile.component.css"]
@@ -26,8 +27,23 @@ export class ProfileComponent implements OnInit {
   isDisbaled = true
   userService = new UserService();
 
+  constructor(private router: Router) {
+  }
+
+
+  get isLoggedIn(): boolean {
+    return localStorage.getItem('isLoggedIn') === 'true';
+  }
+
   ngOnInit() {
-    const storedData = localStorage.getItem("data");
+
+    if (this.isLoggedIn) {
+    } else {
+      this.router.navigate(['/login']);
+    }
+
+    const
+      storedData = localStorage.getItem("data");
 
     if (storedData) {
       try {
@@ -37,12 +53,20 @@ export class ProfileComponent implements OnInit {
         console.warn("Failed to parse stored data.");
       }
     } else {
-      console.warn("No data found in localStorage.");
+      console
+        .warn(
+          "No data found in localStorage."
+        );
     }
   }
 
-  handleChange(info: NzUploadChangeParam): void {
-    if (info.file.originFileObj) {
+  handleChange(info
+               :
+               NzUploadChangeParam
+  ):
+    void {
+    if (info.file.originFileObj
+    ) {
       const file = info.file.originFileObj;
       const reader = new FileReader();
 
@@ -57,8 +81,11 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  handlePicture(): void {
-    if (this.avatarUrl !== '') {
+  handlePicture()
+    :
+    void {
+    if (this.avatarUrl !== ''
+    ) {
       this.dataUser.profilePicture = this.avatarUrl;  // Update the profile picture
 
       // Save the updated user object back to localStorage
@@ -73,15 +100,23 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  onDelete(code: string) {
+  onDelete(code
+           :
+           string
+  ) {
     this._dataUser.rooms = this._dataUser.rooms.filter((ca) => ca.codeRoom !== code);
   }
 
-  get dataUser(): User {
+  get dataUser()
+    :
+    User {
     return this._dataUser;
   }
 
-  set dataUser(value: User) {
+  set dataUser(value
+               :
+               User
+  ) {
     this._dataUser = value;
   }
 
