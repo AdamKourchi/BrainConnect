@@ -228,10 +228,12 @@ export class CanvasComponent implements AfterViewInit {
 
 
 
+  saveStage(stage:any) {
+    const stageData = stage.children.map((child:any) => child.toJSON());
+    console.log(stageData);
+    return JSON.stringify(stageData);
+  }
+  
 
-
-
-
-
-
+  
 }
