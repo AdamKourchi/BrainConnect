@@ -16,7 +16,7 @@ import {HandleErrors} from '../../../core/service/HandleErrors';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private userService: UserService,
@@ -69,6 +69,19 @@ export class LoginComponent {
         }
       });
     }
+  }
+
+  get isLoggedIn(): boolean {
+    return localStorage.getItem('isLoggedIn') === 'true';
+  }
+
+  ngOnInit(): void {
+    if (this.isLoggedIn) {
+      this.router.navigate(['/create']);
+    } else {
+
+    }
+
   }
 
 }
