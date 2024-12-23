@@ -13,10 +13,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzLayoutModule} from 'ng-zorro-antd/layout';
 import {CommonModule} from '@angular/common';
 import RoomService from '../../../core/service/RoomService';
-import {Room} from '../../../core/module/room/Room';
-import {User} from '../../../core/module/room/User';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NzIconDirective} from 'ng-zorro-antd/icon';
+import { Room } from '../../../core/module/room/Room';
+import { User } from '../../../core/module/room/User';
 
 @Component({
   selector: 'app-create',
@@ -39,14 +37,12 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
   templateUrl: './create.component.html',
   styleUrl: './create.component.css',
 })
+
 export class CreateComponent implements OnInit {
   roomService = new RoomService();
   userData: any;
   roomForm!: FormGroup;
-  @ViewChild('template') template!: TemplateRef<{}>;
-
-  constructor(private fb: FormBuilder, private notification: NzNotificationService) {
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     // Get user ID from localStorage
@@ -102,5 +98,12 @@ export class CreateComponent implements OnInit {
 
   handleCancelMiddle(): void {
     this.isVisibleMiddle = false;
+  }
+
+  goToRoom(): void {
+    this.roomService.getRoomByCode(this.roomCode).then(({ data }) => {
+      console.log(data);
+      this.router.navigate(['/editor/', data]);
+    });
   }
 }
