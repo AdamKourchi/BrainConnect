@@ -25,22 +25,20 @@
 
         <div class="flex gap-2">
           <div class="w-full flex flex-col gap-2">
-            <label class="font-semibold text-xs text-gray-400"
-              >First Name</label
-            >
+            <label class="font-semibold text-xs text-gray-400">UserName</label>
             <input
-              formControlName="firstName"
-              placeholder="First name"
+              formControlName="username"
+              placeholder="user name"
               type="text"
               class="border rounded-lg px-3 py-2 mb-5 text-sm w-full outline-none dark:border-gray-500 dark:bg-white"
             />
           </div>
 
           <div class="w-full flex flex-col gap-2">
-            <label class="font-semibold text-xs text-gray-400">Last name</label>
+            <label class="font-semibold text-xs text-gray-400">Email</label>
             <input
-              formControlName="lastName"
-              placeholder="Last name"
+              formControlName="email"
+              placeholder="email"
               class="border rounded-lg px-3 py-2 mb-5 text-sm w-full outline-none dark:border-gray-500 dark:bg-white"
               type="text"
             />
@@ -49,18 +47,20 @@
 
         <div class="flex gap-2">
           <div class="w-full flex flex-col gap-2">
-            <label class="font-semibold text-xs text-gray-400">Username</label>
+            <label class="font-semibold text-xs text-gray-400">Password</label>
             <input
-              formControlName="email"
-              placeholder="Username"
+              formControlName="password"
+              placeholder="password"
               class="border rounded-lg px-3 py-2 mb-5 text-sm w-full outline-none dark:border-gray-500 dark:bg-white"
             />
           </div>
 
           <div class="w-full flex flex-col gap-2">
-            <label class="font-semibold text-xs text-gray-400">Password</label>
+            <label class="font-semibold text-xs text-gray-400"
+              >Repeat Password</label
+            >
             <input
-              formControlName="password"
+              formControlName="rePassword"
               placeholder="••••••••"
               class="border rounded-lg px-3 py-2 mb-5 text-sm w-full outline-none dark:border-gray-500 dark:bg-white"
               type="password"

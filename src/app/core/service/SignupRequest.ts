@@ -1,6 +1,5 @@
 export class SignupRequest {
-  public firstName: string | undefined;
-  public lastName: string | undefined;
-  public userName: string | undefined;
+  public username: string | undefined;
+  public email: string | undefined;
   public password: string | undefined;
 }

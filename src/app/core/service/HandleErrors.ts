@@ -14,6 +14,11 @@ export class HandleErrors {
       return `${label} must be at least 6 characters long`;
     } else if (input?.hasError('email')) {
       return `${label} is invalid`;
+    } else if (
+      formControl === 'rePassword' &&
+      formGroup?.hasError('passwordMismatch')
+    ) {
+      return `Passwords do not match`;
     } else {
       return null;
     }
