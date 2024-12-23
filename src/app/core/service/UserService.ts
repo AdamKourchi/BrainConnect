@@ -9,7 +9,7 @@ import { SignupRequest } from './SignupRequest';
 })
 export class UserService {
   // private apiUrl = 'http://localhost:8080/users/';
-  private apiUrl = 'http://localhost:8081/api/user/';
+  private apiUrl = 'http://localhost:8080/api/user/';
 
   saveUser(user: User) {
     return axios.post(this.apiUrl + 'save', user);

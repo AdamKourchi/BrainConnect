@@ -35,29 +35,44 @@
       (nzOnCancel)="handleCancelMiddle()"
       (nzOnOk)="handleOkMiddle()"
     >
-    <ng-container *nzModalContent>
+      <ng-container *nzModalContent>
         <form nz-form [formGroup]="roomForm" (ngSubmit)="submitForm()">
           <nz-form-item>
             <nz-form-label [nzSpan]="6" nzRequired>Room Title</nz-form-label>
             <nz-form-control [nzSpan]="14" nzErrorTip="Please input your room title!">
-              <input nz-input formControlName="title" placeholder="Enter room title" />
+              <input nz-input formControlName="title" placeholder="Enter room title"/>
             </nz-form-control>
           </nz-form-item>
-  
+
           <nz-form-item>
             <nz-form-control [nzOffset]="6" [nzSpan]="14">
               <button nz-button nzType="primary" [disabled]="!roomForm.valid">Create Room</button>
             </nz-form-control>
           </nz-form-item>
 
-          
+
         </form>
-        </ng-container>
-        <div *nzModalFooter>
-       
-        </div>
+      </ng-container>
+      <div *nzModalFooter>
+
+      </div>
     </nz-modal>
   </div>
 </section>
+
+<ng-template #template>
+  <div class="ant-notification-notice-content">
+    <div class="ant-notification-notice-with-icon">
+      <span class="ant-notification-notice-icon">
+            <nz-icon nzType="check" nzTheme="outline" class="text-green-500"/>
+      </span>
+      <div class="ant-notification-notice-message">Room Created Successfully</div>
+      <div class="ant-notification-notice-description">
+        Your new room has been created successfully.
+      </div>
+    </div>
+  </div>
+</ng-template>
+
 
 <p class="h-1 bg-[#2ecc40] w-full"></p>

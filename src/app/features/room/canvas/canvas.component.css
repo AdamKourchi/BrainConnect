@@ -1,7 +1,6 @@
-canvas{
+canvas {
   border: 1px solid #ffffff;
   background-image: url('/assets/editor/EditorBackground.png');
-
 }
 
 ::ng-deep .ant-color-picker-trigger {
@@ -9,4 +8,17 @@ canvas{
   box-shadow: none !important;
 }
 
+::ng-deep .canvas-container {
+  width: 0px !important;
+  height: 0px !important;
+}
 
+#canvas {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+::ng-deep .upper-canvas {
+  width: 100vw !important;
+  height: 100vh !important;
+}

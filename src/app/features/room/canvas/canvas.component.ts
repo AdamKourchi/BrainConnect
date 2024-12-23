@@ -1,16 +1,16 @@
-import { Component, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzColorPickerComponent } from 'ng-zorro-antd/color-picker';
-import { FormsModule } from '@angular/forms';
-import { NzButtonComponent, NzButtonModule } from 'ng-zorro-antd/button';
-import { NzSpaceCompactComponent } from 'ng-zorro-antd/space';
+import {Component, AfterViewInit, OnInit, OnDestroy} from '@angular/core';
+import {NzIconModule} from 'ng-zorro-antd/icon';
+import {NzColorPickerComponent} from 'ng-zorro-antd/color-picker';
+import {FormsModule} from '@angular/forms';
+import {NzButtonComponent, NzButtonModule} from 'ng-zorro-antd/button';
+import {NzSpaceCompactComponent} from 'ng-zorro-antd/space';
 import RoomService from '../../../core/service/RoomService';
-import { Room } from '../../../core/module/room/Room';
-import { ActivatedRoute } from '@angular/router';
+import {Room} from '../../../core/module/room/Room';
+import {ActivatedRoute} from '@angular/router';
 import * as fabric from 'fabric';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
-import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import {Subject} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
+import {NzDrawerModule} from 'ng-zorro-antd/drawer';
 
 @Component({
   selector: 'app-canvas',
@@ -53,7 +53,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.visible = false;
   }
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute) {
+  }
 
   ngOnInit(): void {
     this.roomId = Number(this.route.snapshot.paramMap.get('roomId'));
@@ -91,7 +92,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
         if (this.isUserInteracting) {
           console.log('No ');
           return;
-          
+
         }
         this.restoreStage(this.room.design);
       });
@@ -119,6 +120,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
       fontSize: 40,
       fill: this.strokeColor,
       editable: true,
+      selectable: true
+
     });
 
     this.canvas.add(text);
@@ -127,7 +130,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
     // Make text movable
     text.on('mousedown', () => {
-      text.set({ cursor: 'move' });
+      text.set({cursor: 'move'});
     });
   }
 
@@ -165,15 +168,38 @@ export class CanvasComponent implements OnInit, OnDestroy {
     }
   }
 
+  handleSelectErase() {
+    // Deselect other modes
+    this.drawingSelected = false;
+    this.textSelected = false;
+    this.erasingSelected = !this.erasingSelected;
+
+    // Toggle erase mode
+    if (this.erasingSelected) {
+      this.canvas.isDrawingMode = false;
+      this.canvas.selection = false;
+      this.canvas.defaultCursor = 'pointer';
+    } else {
+      this.canvas.selection = true;
+      this.canvas.defaultCursor = 'default';
+    }
+
+    // Call deleteSelectedObjects when in erase mode
+    if (this.erasingSelected) {
+      this.deleteSelectedObjects();
+    }
+  }
+
   deleteSelectedObjects(): void {
     const activeObjects = this.canvas.getActiveObjects();
     if (activeObjects.length > 0) {
       activeObjects.forEach((obj: fabric.Object) => {
         this.canvas.remove(obj);
       });
-      this.canvas.discardActiveObject(); // Deselect objects after deletion
+      this.canvas.discardActiveObject();
     }
   }
+
 
   saveStage() {
     console.log('Svaing...');
@@ -184,14 +210,13 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
 
-
   restoreStage(savedData: string): void {
     console.log('Restoring canvas state...');
-    
+
     if (this.isUserInteracting) return;
 
     if (savedData !== this.lastFetchedData) {
-      
+
       this.lastFetchedData = savedData;
 
       this.canvas.loadFromJSON(savedData, () => {
@@ -211,7 +236,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   private setupCanvasListeners(): void {
     const events = [
       'object:modified',
-      'object:added', 
+      'object:added',
       'object:removed',
       'canvas:modified',
       'mouse:up',
@@ -228,7 +253,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
       'object:skewing',
       'path:created'
     ];
-                   
+
     events.forEach(event => {
       this.canvas.on(event, () => {
         this.isUserInteracting = true;
@@ -245,6 +270,4 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
 
-  
-  
 }
