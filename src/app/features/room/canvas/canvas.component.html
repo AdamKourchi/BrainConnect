@@ -1,51 +1,56 @@
-<canvas id="canvas"
-        [class.eraser-cursor]="erasingSelected"
-        [class.edit-cursor]="drawingSelected"
-></canvas>
+<canvas id="canvas" ></canvas>
 
 <div
-  class="border-solid bg-gradient-to-r from-cyan-500 to-blue-500 overflow-hidden top-5 absolute  bg-white w-10/12 rounded-full border-2 shadow-lg left-1/2 transform -translate-x-1/2 flex items-center"
+  class="border-solid  border-sky-500 overflow-hidden top-5 absolute  bg-white w-10/12 rounded-full border-2 shadow-lg left-1/2 transform -translate-x-1/2 flex items-center"
 >
 
-  <nz-space-compact class="flex p-2 px-10 justify-between items-center gap-8 w-full">
+  <nz-space-compact class="flex p-2 px-10 justify-between items-center gap-8 w-full border-4 border-orange-500">
 
-    <div class="flex flex-row items-center gap-5">
-      <button
-        class="{{drawingSelected? 'bg-[#f8923f] text-white' : 'bg-white ' }} px-2 py-1 shadow-lg rounded-full transition-all"
-        (click)="handleSelectDraw()">
+    <div class="flex flex-row items-center gap-5 border-4 border-orange-500">
+      <button nz-button [nzType]="drawingSelected ? 'primary' : 'default'" (click)="handleSelectDraw()">
         <nz-icon nzTheme="outline" nzType="edit"/>
       </button>
 
-      <button
-        class="{{textSelected? 'bg-[#f8923f] text-white' : 'bg-white ' }} px-2 py-1 shadow-lg rounded-full transition-all"
-        (click)="handleSelectText()">
+      <button nz-button [nzType]="textSelected ? 'primary' : 'default'" (click)="handleSelectText()">
         <nz-icon nzType="file-text" nzTheme="outline"/>
       </button>
 
-      <button
-        class="{{erasingSelected? 'bg-[#f8923f] text-white cursor-custom' : 'bg-white ' }} px-2 py-1 shadow-lg rounded-full transition-all"
-        (click)="handleSelectErase()">
+      <button nz-button [nzType]="erasingSelected ? 'primary' : 'default'" (click)="deleteSelectedObjects()">
         <nz-icon nzType="clear" nzTheme="outline"/>
       </button>
 
-      <nz-color-picker
-        nzSize="small"
-        nzTrigger="hover"
-        [(ngModel)]="strokeColor"
-        nzDisabledAlpha
-        (click)="handleColorChange()"
-        class="bg-white px-[3px] py-[2.5px] shadow-lg rounded-[9999px]"
-      ></nz-color-picker>
-
+      <button nz-button (click)="handleColorChange()">
+        <nz-color-picker nzSize="small" id="colorPicker" [(ngModel)]="strokeColor" nzDisabledAlpha></nz-color-picker>
+      </button>
     </div>
-    <div class="">
-      <button class="bg-white px-2 py-1 shadow-lg rounded-full transition-all" (click)="clearCanvas()">
+
+    <div class="flex justify-end border-4 border-orange-500">
+      <button nz-button (click)="clearCanvas()" class="mx-10">
+        <nz-icon nzType="delete" nzTheme="outline"/>
+      </button>
+
+      <button nz-button (click)="open()" class="mx-10">
         <nz-icon nzType="delete" nzTheme="outline"/>
       </button>
     </div>
+
+
+
+    
+    <nz-drawer
+      [nzClosable]="false"
+      [nzVisible]="visible"
+      nzPlacement="right"
+      nzTitle="Basic Drawer"
+      (nzOnClose)="close()"
+    >
+      <ng-container *nzDrawerContent>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </ng-container>
+    </nz-drawer>
   </nz-space-compact>
-
-
 </div>
 
 

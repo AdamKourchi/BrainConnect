@@ -128,7 +128,7 @@ container mx-auto sm:px-12 lg:px-20 xl:px-32">
 
       <nz-card style="width:300px;" [nzCover]="coverTemplate" [nzActions]="[actionEdit ,actionDelete]">
         <nz-card-meta
-          nzTitle="{{canva.design }}"
+          nzTitle="{{canva.title }}"
           nzDescription="This is the description"
         ></nz-card-meta>
       </nz-card>
@@ -136,7 +136,7 @@ container mx-auto sm:px-12 lg:px-20 xl:px-32">
         <img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"/>
       </ng-template>
       <ng-template #actionEdit>
-        <nz-icon nzType="edit"/>
+        <nz-icon  nzType="edit"  (click)="onEdit(canva.id)" />
       </ng-template>
       <ng-template #actionDelete>
         <nz-icon nzType="delete" (click)="onDelete(canva.codeRoom)"/>

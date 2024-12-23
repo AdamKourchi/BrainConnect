@@ -1,24 +1,7 @@
-body,
-html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-}
+canvas{
+  border: 1px solid #ffffff;
+  background-image: url('/assets/editor/EditorBackground.png');
 
-.eraser-cursor {
-  cursor: url('/assets/eraser.svg'), auto;
-}
-
-.edit-cursor {
-  cursor: url('/assets/edit.svg'), auto;
-}
-
-canvas {
-  width: 100vw;
-  height: 100vh;
-  background-image: url("/assets/editor/EditorBackground.png");
-  background-size: cover;
 }
 
 ::ng-deep .ant-color-picker-trigger {

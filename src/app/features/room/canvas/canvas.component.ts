@@ -1,190 +1,135 @@
-import {Component, AfterViewInit} from '@angular/core';
-import * as easel from 'createjs-module';
-import {NzIconModule} from 'ng-zorro-antd/icon';
-import {FormsModule} from '@angular/forms';
-import {NzButtonModule} from 'ng-zorro-antd/button';
-import {NzSpaceCompactComponent} from 'ng-zorro-antd/space';
-import {NzColorPickerComponent} from 'ng-zorro-antd/color-picker';
-
+import { Component, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzColorPickerComponent } from 'ng-zorro-antd/color-picker';
+import { FormsModule } from '@angular/forms';
+import { NzButtonComponent, NzButtonModule } from 'ng-zorro-antd/button';
+import { NzSpaceCompactComponent } from 'ng-zorro-antd/space';
+import RoomService from '../../../core/service/RoomService';
+import { Room } from '../../../core/module/room/Room';
+import { ActivatedRoute } from '@angular/router';
+import * as fabric from 'fabric';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 
 @Component({
   selector: 'app-canvas',
-  imports: [NzIconModule, FormsModule, NzButtonModule, NzSpaceCompactComponent, NzColorPickerComponent],
+  imports: [
+    NzIconModule,
+    NzColorPickerComponent,
+    FormsModule,
+    NzButtonComponent,
+    NzButtonModule,
+    NzSpaceCompactComponent,
+    NzDrawerModule
+  ],
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.css'],
 })
-export class CanvasComponent implements AfterViewInit {
-  stage: any;
-  layer: any;
-  isDrawing: boolean = false;
+export class CanvasComponent implements OnInit, OnDestroy {
+  private intervalId: any;
+  private readonly REFRESH_INTERVAL = 1000; // Refresh every 1 seconds
+  roomId!: number;
+  room: any;
+  canvas: any;
   drawingSelected: boolean = false;
   erasingSelected: boolean = false;
   oldX: number = 0;
   oldY: number = 0;
   strokeColor: string = 'black';
-  strokeWidth: number = 5;
-  shape: any;
+  strokeWidth: number = 1;
   textSelected: boolean = false;
+  roomService: RoomService = new RoomService();
+  private lastFetchedData: string = ''; // Stores the last fetched canvas data
+  private isUserInteracting: boolean = false; // Tracks user interaction
+  private saveSubject = new Subject<void>();
+  visible = false;
 
-  ngAfterViewInit(): void {
-    const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-
-    // Adjust for device pixel ratio
-    const dpr = window.devicePixelRatio || 1;
-
-    // Set canvas width and height for high resolution
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = window.innerHeight * dpr;
-
-    // Scale canvas back to logical size
-    canvas.style.width = `${window.innerWidth}px`;
-    canvas.style.height = `${window.innerHeight}px`;
-
-    // Initialize the EaselJS canvas
-    this.stage = new easel.Stage('canvas');
-    this.layer = new easel.Container();
-    this.stage.addChild(this.layer);
-
-    //remove style={}
-    const canvasElement = this.stage.canvas;
-    canvasElement.removeAttribute("style");
-
-    // Create a new shape for drawing
-    this.shape = new easel.Shape();
-    this.layer.addChild(this.shape);
-
-    // Initialize drawing and eraser
-    this.initializeDrawingErase();
-
-    // Add background or initial UI setup if needed
-    this.stage.update();
+  open(): void {
+    this.visible = true;
   }
 
-  initializeDrawingErase() {
-    // Pencil drawing event handlers
-    this.stage.on('stagemousedown', (event: any) => {
-      this.isDrawing = true;
-      this.oldX = event.stageX;
-      this.oldY = event.stageY;
+  close(): void {
+    this.visible = false;
+  }
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.roomId = Number(this.route.snapshot.paramMap.get('roomId'));
+    this.canvas = new fabric.Canvas('canvas');
+
+    this.saveSubject.pipe(
+      debounceTime(500)
+    ).subscribe(() => {
+      this.saveStage();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.saveSubject.complete();
+    clearInterval(this.intervalId);
+  }
+
+  ngAfterViewInit(): void {
+    // Set canvas to fullscreen
+    this.setCanvasSize();
+    // Optionally handle window resize
+    window.addEventListener('resize', this.setCanvasSize.bind(this));
+
+    this.setupCanvasListeners();
+
+    this.roomService.getRoomById(this.roomId).then((response) => {
+      this.room = response.data;
+      this.restoreStage(this.room.design);
     });
 
-    this.stage.on('stagemousemove', (event: any) => {
-      if (this.isDrawing) {
-        const newX = event.stageX;
-        const newY = event.stageY;
-
-        if (this.drawingSelected) {
-          // Drawing mode
-          this.shape.graphics
-            .setStrokeStyle(this.strokeWidth)
-            .beginStroke(this.strokeColor)
-            .moveTo(this.oldX, this.oldY)
-            .lineTo(newX, newY);
-        } else if (this.erasingSelected) {
-          // Erasing mode
-          this.shape.graphics
-            .setStrokeStyle(25)
-            .beginStroke('white')
-            .moveTo(this.oldX, this.oldY)
-            .lineTo(newX, newY);
+    this.intervalId = setInterval(() => {
+      console.log('refreshing');
+      this.roomService.getRoomById(this.roomId).then((response) => {
+        this.room = response.data;
+        if (this.isUserInteracting) {
+          console.log('No ');
+          return;
+          
         }
+        this.restoreStage(this.room.design);
+      });
+    }, this.REFRESH_INTERVAL);
+  }
 
-        this.oldX = newX;
-        this.oldY = newY;
+  private setCanvasSize(): void {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
-        this.stage.update();
-      }
-    });
-
-    this.stage.on('stagemouseup', () => {
-      this.isDrawing = false;
-    });
+    // Set canvas size to full screen
+    this.canvas.setWidth(width);
+    this.canvas.setHeight(height);
+    this.canvas.renderAll(); // Re-render canvas after resizing
   }
 
   clearCanvas() {
-    // Remove all children from the layer
-    this.layer.removeAllChildren();
-
-    // Reinitialize the shape
-    this.shape = new easel.Shape();
-    this.layer.addChild(this.shape);
-
-    // Reinitialize the drawing logic
-    this.initializeDrawingErase();
-
-    // Update the stage
-    this.stage.update();
-
-    this.textSelected = false
+    this.canvas.clear();
   }
 
   addText() {
-    const text = new easel.Text('', 'bold 40px Arial', this.strokeColor);
+    const text = new fabric.Textbox('Enter text here...', {
+      left: this.canvas.width / 2,
+      top: this.canvas.height / 2,
+      fontSize: 40,
+      fill: this.strokeColor,
+      editable: true,
+    });
 
-    const stageWidth = this.stage.canvas.width;
-    const stageHeight = this.stage.canvas.height;
+    this.canvas.add(text);
+    this.canvas.setActiveObject(text);
+    this.canvas.renderAll();
 
-    // Center the text on the stage
-    text.x = stageWidth / 2;
-    text.y = stageHeight / 2;
-
-    text.textBaseline = 'top';
-    this.layer.addChild(text);
-    this.stage.update();
-
-    // Create a temporary input element to capture text
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.style.position = 'absolute';
-    input.style.left = '50%';
-    input.style.top = '50%';
-    input.style.transform = 'translate(-50%, -50%)';
-    input.style.border = '2px solid black';
-    input.style.borderRadius = '8px';
-    input.style.padding = '10px';
-    input.placeholder = 'Enter text here...';
-    input.id = 'input-message';
-
-    input.style.fontSize = '40px';
-    input.style.color = this.strokeColor;
-    input.focus();
-
-    let foundInput = document.getElementById('input-message');
-
-    // Add input to the DOM
-    foundInput == null
-      ? document.body.appendChild(input)
-      : document.body.removeChild(foundInput);
-
-    // Handle text input and cleanup
-    input.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        text.text = input.value;
-        this.stage.update();
-        document.body.removeChild(input);
-        this.makeTextMovable(text);
-      }
+    // Make text movable
+    text.on('mousedown', () => {
+      text.set({ cursor: 'move' });
     });
   }
-
-  makeTextMovable(text: any) {
-    text.on('mousedown', (event: any) => {
-      const offsetX = text.x - event.stageX;
-      const offsetY = text.y - event.stageY;
-
-      // Attach event listeners for dragging
-      let listener = this.stage.on('stagemousemove', (moveEvent: any) => {
-        text.x = moveEvent.stageX + offsetX;
-        text.y = moveEvent.stageY + offsetY;
-        this.stage.update();
-      });
-
-      this.stage.on('stagemouseup', () => {
-        this.stage.off('stagemousemove', listener);
-      });
-    });
-  }
-
 
   handleColorChange() {
     console.log(this.strokeColor);
@@ -194,63 +139,112 @@ export class CanvasComponent implements AfterViewInit {
     // Deselect other modes
     this.drawingSelected = false;
     this.erasingSelected = false;
+    this.canvas.isDrawingMode = this.drawingSelected;
 
     // Toggle text mode
     this.textSelected = !this.textSelected;
 
-    const existingInput = document.getElementById('input-message');
-
+    // If text mode is activated, add text to the canvas
     if (this.textSelected) {
-      // If text mode is activated, add text to the canvas only if no input exists
-      if (!existingInput) {
-        this.addText();
-      }
-    } else {
-      // If text mode is deactivated, remove the input field if it exists
-      if (existingInput) {
-        document.body.removeChild(existingInput);
-      }
+      this.addText();
     }
   }
-
 
   handleSelectDraw() {
     // Deselect other modes
     this.textSelected = false;
     this.erasingSelected = false;
-
-    // Toggle drawing mode
     this.drawingSelected = !this.drawingSelected;
+    this.canvas.isDrawingMode = this.drawingSelected;
 
-    // Remove the text input field if it exists
-    const existingInput = document.getElementById('input-message');
-    if (existingInput) {
-      document.body.removeChild(existingInput);
+    if (this.drawingSelected) {
+      this.canvas.isDrawingMode = true;
+      this.canvas.freeDrawingBrush = new fabric.PencilBrush(this.canvas);
+      this.canvas.freeDrawingBrush.color = this.strokeColor; // Brush color
+      this.canvas.freeDrawingBrush.width = 5; // Brush width
+    }
+  }
+
+  deleteSelectedObjects(): void {
+    const activeObjects = this.canvas.getActiveObjects();
+    if (activeObjects.length > 0) {
+      activeObjects.forEach((obj: fabric.Object) => {
+        this.canvas.remove(obj);
+      });
+      this.canvas.discardActiveObject(); // Deselect objects after deletion
+    }
+  }
+
+  saveStage() {
+    console.log('Svaing...');
+
+    const savedData = JSON.stringify(this.canvas.toJSON());
+    // Also save to database
+    this.roomService.saveRoomState(savedData, this.roomId);
+  }
+
+
+
+  restoreStage(savedData: string): void {
+    console.log('Restoring canvas state...');
+    
+    if (this.isUserInteracting) return;
+
+    if (savedData !== this.lastFetchedData) {
+      
+      this.lastFetchedData = savedData;
+
+      this.canvas.loadFromJSON(savedData, () => {
+        this.canvas.requestRenderAll();
+        console.log('Canvas state restored and rendered');
+
+        this.canvas.forEachObject((obj: fabric.Object) => {
+          obj.set('opacity', 1); // Ensure objects are fully visible
+          obj.set('selectable', true); // Make sure objects are selectable (if needed)
+        });
+        this.canvas.requestRenderAll();
+      });
     }
   }
 
 
-  handleSelectErase() {
-    // Deselect other modes
-    this.textSelected = false;
-    this.drawingSelected = false;
+  private setupCanvasListeners(): void {
+    const events = [
+      'object:modified',
+      'object:added', 
+      'object:removed',
+      'canvas:modified',
+      'mouse:up',
+      'mouse:down',
+      'selection:created',
+      'object:moved',
+      'text:changed',
+      'text:editing:entered',
+      'text:editing:exited',
+      'text:selection:changed',
+      'text:changed',
+      'object:rotating',
+      'object:scaling',
+      'object:skewing',
+      'path:created'
+    ];
+                   
+    events.forEach(event => {
+      this.canvas.on(event, () => {
+        this.isUserInteracting = true;
+        this.saveSubject.next();
+        this.resetInteractionFlag();
+      });
+    });
+  }
 
-    // Toggle eraser mode
-    this.erasingSelected = !this.erasingSelected;
-
-    // Remove the text input field if it exists
-    const existingInput = document.getElementById('input-message');
-    if (existingInput) {
-      document.body.removeChild(existingInput);
-    }
+  private resetInteractionFlag(): void {
+    setTimeout(() => {
+      this.isUserInteracting = false;
+    }, 1000); // Adjust delay as needed
   }
 
 
-  saveStage(stage: any) {
-    const stageData = stage.children.map((child: any) => child.toJSON());
-    console.log(stageData);
-    return JSON.stringify(stageData);
-  }
-
-
+  
+  
 }

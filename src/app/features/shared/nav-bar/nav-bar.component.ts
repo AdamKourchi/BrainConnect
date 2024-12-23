@@ -28,7 +28,7 @@ export class NavBarComponent implements OnInit {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         // Hide navbar on specific routes
-        this.display = event.urlAfterRedirects !== '/editor';
+        this.display = !event.urlAfterRedirects.startsWith('/editor');
       }
     });
 

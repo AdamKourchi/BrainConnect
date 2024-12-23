@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {Component, OnInit} from "@angular/core";
 import {MatIconModule} from "@angular/material/icon";
 import {ReactiveFormsModule} from "@angular/forms";
@@ -12,64 +13,80 @@ import {UserService} from '../../../core/service/UserService';
 import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
 import {NzModalComponent, NzModalModule} from 'ng-zorro-antd/modal';
 import {log} from 'ng-zorro-antd/core/logger';
+=======
+import { Component, OnInit } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
+import { User } from '../../../core/module/room/User';
+import { Router, RouterLink } from '@angular/router';
+import { NzInputDirective, NzInputGroupComponent } from 'ng-zorro-antd/input';
+import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { NzUploadChangeParam, NzUploadComponent } from 'ng-zorro-antd/upload';
+import { NzIconDirective } from 'ng-zorro-antd/icon';
+import { UserService } from '../../../core/service/UserService';
+import { NzCardComponent, NzCardMetaComponent } from 'ng-zorro-antd/card';
+import RoomService from '../../../core/service/RoomService';
+>>>>>>> df85528 (RealTimeFeature)
 
 @Component({
-  selector: "app-profile",
+  selector: 'app-profile',
   imports: [
+<<<<<<< HEAD
     MatIconModule, ReactiveFormsModule, NzAvatarComponent,
     NzInputDirective, NzButtonComponent, NzUploadComponent, NzIconDirective, NzInputGroupComponent, NzCardComponent, NzCardMetaComponent, NzModalComponent,
     NzButtonModule, NzModalModule
+=======
+    MatIconModule,
+    ReactiveFormsModule,
+    NzAvatarComponent,
+    RouterLink,
+    NzInputDirective,
+    NzButtonComponent,
+    NzUploadComponent,
+    NzIconDirective,
+    NzInputGroupComponent,
+    NzCardComponent,
+    NzCardMetaComponent,
+>>>>>>> df85528 (RealTimeFeature)
   ],
-  templateUrl: "./profile.component.html",
-  styleUrls: ["./profile.component.css"]
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
-
-  private _dataUser!: User;
+  dataUser!: any;
   avatarUrl: string | undefined = '';
-  isDisbaled = true
+  isDisbaled = true;
   userService = new UserService();
+  roomService = new RoomService();
 
-  constructor(private router: Router) {
-  }
-
+  constructor(private router: Router) {}
 
   get isLoggedIn(): boolean {
     return localStorage.getItem('isLoggedIn') === 'true';
   }
 
   ngOnInit() {
-
     if (this.isLoggedIn) {
     } else {
       this.router.navigate(['/login']);
     }
 
-    const
-      storedData = localStorage.getItem("data");
+    const storedData = localStorage.getItem('data');
 
-    if (storedData) {
-      try {
-        this.dataUser = JSON.parse(storedData);  // Retrieve updated user data
-        this.avatarUrl = this.dataUser.profilePicture;  // Set the avatarUrl to updated picture
-      } catch (error) {
-        console.warn("Failed to parse stored data.");
-      }
-    } else {
-      console
-        .warn(
-          "No data found in localStorage."
-        );
-    }
+    this.dataUser = storedData ? JSON.parse(storedData) : null;
+
+    const parsedData = storedData ? JSON.parse(storedData) : null;
+
+    this.roomService.getUserRooms(parsedData?.id).then((response) => {
+      this.dataUser.rooms = response.data;
+
+      console.log(this.dataUser.rooms);
+    });
   }
 
-  handleChange(info
-               :
-               NzUploadChangeParam
-  ):
-    void {
-    if (info.file.originFileObj
-    ) {
+  handleChange(info: NzUploadChangeParam): void {
+    if (info.file.originFileObj) {
       const file = info.file.originFileObj;
       const reader = new FileReader();
 
@@ -79,57 +96,41 @@ export class ProfileComponent implements OnInit {
       reader.readAsDataURL(file);
     }
 
-    if (info.file.status === "done") {
-      alert("Upload successful:");
+    if (info.file.status === 'done') {
+      alert('Upload successful:');
     }
   }
 
-  handlePicture()
-    :
-    void {
-    if (this.avatarUrl !== ''
-    ) {
-      this.dataUser.profilePicture = this.avatarUrl;  // Update the profile picture
+  handlePicture(): void {
+    if (this.avatarUrl !== '') {
+      this.dataUser.profilePicture = this.avatarUrl; // Update the profile picture
 
       // Save the updated user object back to localStorage
-      localStorage.setItem('data', JSON.stringify(this.dataUser));  // Persist updated data
+      localStorage.setItem('data', JSON.stringify(this.dataUser)); // Persist updated data
       // Save the user data through the service (optional depending on backend)
       this.userService.saveUser(this.dataUser).then((response) => {
-        this.dataUser = response.data;  // Update the user data after saving from backend
-        this.avatarUrl = this.dataUser.profilePicture;  // Ensure the avatarUrl is updated in the template
+        this.dataUser = response.data; // Update the user data after saving from backend
+        this.avatarUrl = this.dataUser.profilePicture; // Ensure the avatarUrl is updated in the template
       });
-      alert("Modify successful");
-
+      alert('Modify successful');
     }
   }
 
-  onDelete(code
-           :
-           string
-  ) {
-    this._dataUser.rooms = this._dataUser.rooms.filter((ca) => ca.codeRoom !== code);
+  onDelete(code: string) {
+    console.log(code);
   }
 
-  get dataUser()
-    :
-    User {
-    return this._dataUser;
-  }
-
-  set dataUser(value
-               :
-               User
-  ) {
-    this._dataUser = value;
+  onEdit(id: number) {
+    this.router.navigate(['/editor', id]);
   }
 
   handleEdit() {
     if (this.isDisbaled) {
-      this.isDisbaled = false
+      this.isDisbaled = false;
     } else {
-      this.isDisbaled = true
+      this.isDisbaled = true;
     }
-    return this.isDisbaled
+    return this.isDisbaled;
   }
 
 

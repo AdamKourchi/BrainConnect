@@ -29,7 +29,9 @@ export class AppFooter implements OnInit{
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         // Hide navbar on specific routes
-        this.display = event.urlAfterRedirects !== '/editor';
+        this.display = !event.urlAfterRedirects.startsWith('/editor');
+        console.log(this.display);
+        
       }
     });
   }
