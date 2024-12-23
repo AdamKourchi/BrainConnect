@@ -21,7 +21,7 @@
       </button>
 
       <button
-        class="{{erasingSelected? 'bg-[#f8923f] text-white' : 'bg-white' }} px-2 py-1 shadow-lg rounded-full transition-all"
+        class="bg-white px-2 py-1 shadow-lg rounded-full transition-all active:bg-[#f8923f] active:text-white"
         (click)="handleSelectErase()">
         <nz-icon nzType="clear" nzTheme="outline"/>
       </button>
@@ -37,7 +37,7 @@
 
     </div>
     <div class="flex flex-row gap-4">
-      <button class="bg-white px-2 py-1 shadow-lg rounded-full transition-all" (click)="clearCanvas()">
+      <button class="bg-white px-2 py-1 shadow-lg rounded-full transition-all active:bg-red-600 active:text-white" (click)="clearCanvas()">
         <nz-icon nzType="delete" nzTheme="outline"/>
       </button>
       <button (click)="open()"
@@ -53,13 +53,11 @@
     [nzClosable]="false"
     [nzVisible]="visible"
     nzPlacement="right"
-    nzTitle="Basic Drawer"
+    [nzTitle]="roomName"
     (nzOnClose)="close()"
   >
     <ng-container *nzDrawerContent>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
+      <p>Room's Code :</p> <p>{{roomCode}}</p>    
     </ng-container>
   </nz-drawer>
 </div>

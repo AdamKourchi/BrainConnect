@@ -26,14 +26,16 @@ import {NzDrawerModule} from 'ng-zorro-antd/drawer';
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.css'],
 })
+
 export class CanvasComponent implements OnInit, OnDestroy {
   private intervalId: any;
   private readonly REFRESH_INTERVAL = 1000; // Refresh every 1 seconds
   roomId!: number;
   room: any;
+  roomName: string = '';
+  roomCode: string = '';
   canvas: any;
   drawingSelected: boolean = false;
-  erasingSelected: boolean = false;
   oldX: number = 0;
   oldY: number = 0;
   strokeColor: string = 'black';
@@ -82,15 +84,17 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
     this.roomService.getRoomById(this.roomId).then((response) => {
       this.room = response.data;
+      this.roomName = this.room.title;
+      this.roomCode = this.room.codeRoom;
+ 
+      
       this.restoreStage(this.room.design);
     });
 
     this.intervalId = setInterval(() => {
-      console.log('refreshing');
       this.roomService.getRoomById(this.roomId).then((response) => {
         this.room = response.data;
         if (this.isUserInteracting) {
-          console.log('No ');
           return;
 
         }
@@ -141,7 +145,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   handleSelectText() {
     // Deselect other modes
     this.drawingSelected = false;
-    this.erasingSelected = false;
     this.canvas.isDrawingMode = this.drawingSelected;
 
     // Toggle text mode
@@ -156,7 +159,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
   handleSelectDraw() {
     // Deselect other modes
     this.textSelected = false;
-    this.erasingSelected = false;
     this.drawingSelected = !this.drawingSelected;
     this.canvas.isDrawingMode = this.drawingSelected;
 
@@ -169,25 +171,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   handleSelectErase() {
-    // Deselect other modes
-    this.drawingSelected = false;
-    this.textSelected = false;
-    this.erasingSelected = !this.erasingSelected;
-
-    // Toggle erase mode
-    if (this.erasingSelected) {
-      this.canvas.isDrawingMode = false;
-      this.canvas.selection = false;
-      this.canvas.defaultCursor = 'pointer';
-    } else {
-      this.canvas.selection = true;
-      this.canvas.defaultCursor = 'default';
-    }
-
-    // Call deleteSelectedObjects when in erase mode
-    if (this.erasingSelected) {
       this.deleteSelectedObjects();
-    }
+    
   }
 
   deleteSelectedObjects(): void {
@@ -202,8 +187,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
 
   saveStage() {
-    console.log('Svaing...');
-
     const savedData = JSON.stringify(this.canvas.toJSON());
     // Also save to database
     this.roomService.saveRoomState(savedData, this.roomId);
@@ -211,7 +194,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
 
   restoreStage(savedData: string): void {
-    console.log('Restoring canvas state...');
 
     if (this.isUserInteracting) return;
 
@@ -221,7 +203,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
       this.canvas.loadFromJSON(savedData, () => {
         this.canvas.requestRenderAll();
-        console.log('Canvas state restored and rendered');
 
         this.canvas.forEachObject((obj: fabric.Object) => {
           obj.set('opacity', 1); // Ensure objects are fully visible
