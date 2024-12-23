@@ -27,4 +27,8 @@ export default class RoomService {
   public getRoomById(roomId: number) {
     return axios.get(`${this.url}/room/${roomId}`);
   }
+
+  public getRoomByCode(roomCode: string) {
+    return axios.get(`${this.url}/roomCode/${roomCode}`);
+  }
 }

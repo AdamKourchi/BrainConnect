@@ -10,6 +10,7 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {UserService} from '../../../core/service/UserService';
 import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
 import {NzModalComponent, NzModalModule} from 'ng-zorro-antd/modal';
+import {log} from 'ng-zorro-antd/core/logger';
 import RoomService from '../../../core/service/RoomService';
 import {User} from '../../../core/module/room/User';
 
@@ -21,6 +22,7 @@ import {User} from '../../../core/module/room/User';
     NzButtonModule, NzModalModule,
     MatIconModule,
     ReactiveFormsModule,
+
     NzAvatarComponent,
     NzInputDirective,
     NzButtonComponent,

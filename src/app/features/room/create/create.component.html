@@ -14,10 +14,16 @@
     </p>
   </div>
   <div class="rounded-lg w-56 md:w-72 flex gap-3 flex-col items-center">
-    <input
-      class="w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-      placeholder="Insert a room ID...."
-    />
+
+    <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+      <input [(ngModel)]="roomCode" type="text" nz-input placeholder="Type the room ID..." />
+    </nz-input-group>
+
+    <ng-template #suffixButton class="rounded-md">
+      <button (click)="goToRoom()" nz-button class="text-white bg-[#2ecc40]" nzSize="large">Go</button>
+    </ng-template>
+
+
     <span class="text-white">Or</span>
 
     <button
@@ -37,6 +43,9 @@
     >
       <ng-container *nzModalContent>
         <form nz-form [formGroup]="roomForm" (ngSubmit)="submitForm()">
+        
+        
+        
           <nz-form-item>
             <nz-form-label [nzSpan]="6" nzRequired>Room Title</nz-form-label>
             <nz-form-control [nzSpan]="14" nzErrorTip="Please input your room title!">
