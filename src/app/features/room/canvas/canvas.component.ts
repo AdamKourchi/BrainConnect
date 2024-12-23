@@ -2,10 +2,9 @@ import {Component, AfterViewInit, OnInit, OnDestroy} from '@angular/core';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzColorPickerComponent} from 'ng-zorro-antd/color-picker';
 import {FormsModule} from '@angular/forms';
-import {NzButtonComponent, NzButtonModule} from 'ng-zorro-antd/button';
+import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzSpaceCompactComponent} from 'ng-zorro-antd/space';
 import RoomService from '../../../core/service/RoomService';
-import {Room} from '../../../core/module/room/Room';
 import {ActivatedRoute} from '@angular/router';
 import * as fabric from 'fabric';
 import {Subject} from 'rxjs';
@@ -18,7 +17,6 @@ import {NzDrawerModule} from 'ng-zorro-antd/drawer';
     NzIconModule,
     NzColorPickerComponent,
     FormsModule,
-    NzButtonComponent,
     NzButtonModule,
     NzSpaceCompactComponent,
     NzDrawerModule
