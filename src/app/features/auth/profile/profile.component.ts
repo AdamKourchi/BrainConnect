@@ -5,17 +5,20 @@ import {NzAvatarComponent} from 'ng-zorro-antd/avatar';
 import {User} from '../../../core/module/room/User';
 import {Router, RouterLink} from '@angular/router';
 import {NzInputDirective, NzInputGroupComponent} from 'ng-zorro-antd/input';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
+import {NzButtonComponent, NzButtonModule} from 'ng-zorro-antd/button';
 import {NzUploadChangeParam, NzUploadComponent} from 'ng-zorro-antd/upload';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {UserService} from '../../../core/service/UserService';
 import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
+import {NzModalComponent, NzModalModule} from 'ng-zorro-antd/modal';
+import {log} from 'ng-zorro-antd/core/logger';
 
 @Component({
   selector: "app-profile",
   imports: [
-    MatIconModule, ReactiveFormsModule, NzAvatarComponent, RouterLink,
-    NzInputDirective, NzButtonComponent, NzUploadComponent, NzIconDirective, NzInputGroupComponent, NzCardComponent, NzCardMetaComponent
+    MatIconModule, ReactiveFormsModule, NzAvatarComponent,
+    NzInputDirective, NzButtonComponent, NzUploadComponent, NzIconDirective, NzInputGroupComponent, NzCardComponent, NzCardMetaComponent, NzModalComponent,
+    NzButtonModule, NzModalModule
   ],
   templateUrl: "./profile.component.html",
   styleUrls: ["./profile.component.css"]
@@ -128,4 +131,18 @@ export class ProfileComponent implements OnInit {
     }
     return this.isDisbaled
   }
+
+
+  isVisible = false;
+
+  showModal(): void {
+    if (this._dataUser.profilePicture !== '') {
+      this.isVisible = true;
+    }
+  }
+
+  handleCancel(): void {
+    this.isVisible = false;
+  }
+
 }

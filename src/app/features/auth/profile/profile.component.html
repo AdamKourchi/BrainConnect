@@ -3,8 +3,11 @@ container mx-auto sm:px-12 lg:px-20 xl:px-32">
   <div class="picture cursor-pointer flex flex-col items-center gap-2">
     <div class="relative flex flex-col items-center">
       <nz-avatar [nzSize]="100"
-                 [nzSrc]="avatarUrl?.toString() ? avatarUrl?.toString() : dataUser.profilePicture?.toString()"
-                 nzIcon="user">
+                 (click)="showModal()"
+                 class="cursor-zoom-in"
+                 [nzSrc]=" avatarUrl?.toString() ? avatarUrl?.toString() : dataUser.profilePicture?.toString()
+      "
+      nzIcon="user">
       </nz-avatar>
 
       <nz-upload
@@ -25,6 +28,23 @@ container mx-auto sm:px-12 lg:px-20 xl:px-32">
 
 
   </div>
+  <nz-modal
+    nzDraggable
+    nzCentered
+    [(nzVisible)]="isVisible"
+    [nzFooter]="null"
+    (nzOnCancel)="handleCancel()">
+
+    <ng-container *nzModalContent>
+      <div class="h-[450px]">
+        <nz-avatar nzShape="square" class="w-full h-full bg-cover "
+                   [nzSrc]="avatarUrl?.toString() ? avatarUrl?.toString() : dataUser.profilePicture?.toString()"
+                   nzIcon="user">
+        </nz-avatar>
+      </div>
+    </ng-container>
+  </nz-modal>
+
 
   <div class="w-full">
     <form
@@ -94,7 +114,7 @@ container mx-auto sm:px-12 lg:px-20 xl:px-32">
 </div>
 <p class="h-1 bg-[#2ecc40] w-full"></p>
 
-<div class="mx-auto mt-28 mb-28 container mx-auto sm:px-12 lg:px-20 xl:px-32">
+<div class="mx-auto mt-28 mb-28 container sm:px-12 lg:px-20 xl:px-32">
   <h2
     class="text-white text-2xl lg:text-3xl xl:text-4xl text-center mb-14 font-medium"
   >
@@ -124,3 +144,4 @@ container mx-auto sm:px-12 lg:px-20 xl:px-32">
     }
   </div>
 </div>
+X
