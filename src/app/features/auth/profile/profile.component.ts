@@ -11,6 +11,7 @@ import {UserService} from '../../../core/service/UserService';
 import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
 import {NzModalComponent, NzModalModule} from 'ng-zorro-antd/modal';
 import RoomService from '../../../core/service/RoomService';
+import {User} from '../../../core/module/room/User';
 
 @Component({
   selector: 'app-profile',
@@ -33,13 +34,14 @@ import RoomService from '../../../core/service/RoomService';
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
-  dataUser!: any;
+  dataUser!: User;
   avatarUrl: string | undefined = '';
   isDisbaled = true;
   userService = new UserService();
   roomService = new RoomService();
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+  }
 
   get isLoggedIn(): boolean {
     return localStorage.getItem('isLoggedIn') === 'true';
@@ -59,8 +61,6 @@ export class ProfileComponent implements OnInit {
 
     this.roomService.getUserRooms(parsedData?.id).then((response) => {
       this.dataUser.rooms = response.data;
-
-      console.log(this.dataUser.rooms);
     });
   }
 
@@ -74,10 +74,6 @@ export class ProfileComponent implements OnInit {
       };
       reader.readAsDataURL(file);
     }
-
-    if (info.file.status === 'done') {
-      alert('Upload successful:');
-    }
   }
 
   handlePicture(): void {
@@ -88,8 +84,8 @@ export class ProfileComponent implements OnInit {
       localStorage.setItem('data', JSON.stringify(this.dataUser)); // Persist updated data
       // Save the user data through the service (optional depending on backend)
       this.userService.saveUser(this.dataUser).then((response) => {
-        this.dataUser = response.data; // Update the user data after saving from backend
-        this.avatarUrl = this.dataUser.profilePicture; // Ensure the avatarUrl is updated in the template
+        this.dataUser = response.data
+        this.avatarUrl = ''
       });
       alert('Modify successful');
     }
@@ -116,7 +112,7 @@ export class ProfileComponent implements OnInit {
   isVisible = false;
 
   showModal(): void {
-    if (this.dataUser.profilePicture !== '') {
+    if (this.dataUser.profilePicture !== null) {
       this.isVisible = true;
     }
   }
