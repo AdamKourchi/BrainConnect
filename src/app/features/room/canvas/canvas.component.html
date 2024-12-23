@@ -1,4 +1,7 @@
-<canvas id="canvas"></canvas>
+<canvas id="canvas"
+        [class.eraser-cursor]="erasingSelected"
+        [class.edit-cursor]="drawingSelected"
+></canvas>
 
 <div
   class="border-solid bg-gradient-to-r from-cyan-500 to-blue-500 overflow-hidden top-5 absolute  bg-white w-10/12 rounded-full border-2 shadow-lg left-1/2 transform -translate-x-1/2 flex items-center"
@@ -20,7 +23,7 @@
       </button>
 
       <button
-        class="{{erasingSelected? 'bg-[#f8923f] text-white' : 'bg-white ' }} px-2 py-1 shadow-lg rounded-full transition-all"
+        class="{{erasingSelected? 'bg-[#f8923f] text-white cursor-custom' : 'bg-white ' }} px-2 py-1 shadow-lg rounded-full transition-all"
         (click)="handleSelectErase()">
         <nz-icon nzType="clear" nzTheme="outline"/>
       </button>

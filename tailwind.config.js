@@ -6,8 +6,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        urbanist: ['Urbanist', 'sans-serif'], 
-        mogra: ['Mogra', 'sans-serif'], 
+        urbanist: ['Urbanist', 'sans-serif'],
+        mogra: ['Mogra', 'sans-serif'],
 
       },
     },

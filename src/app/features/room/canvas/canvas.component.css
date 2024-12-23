@@ -6,6 +6,14 @@ html {
   width: 100%;
 }
 
+.eraser-cursor {
+  cursor: url('/assets/eraser.svg'), auto;
+}
+
+.edit-cursor {
+  cursor: url('/assets/edit.svg'), auto;
+}
+
 canvas {
   width: 100vw;
   height: 100vh;
@@ -14,8 +22,8 @@ canvas {
 }
 
 ::ng-deep .ant-color-picker-trigger {
-  border: none !important; /* Remove the border */
-  box-shadow: none !important; /* Remove any box shadow */
+  border: none !important;
+  box-shadow: none !important;
 }
 
 
