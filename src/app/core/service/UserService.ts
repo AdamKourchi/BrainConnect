@@ -8,8 +8,8 @@ import { SignupRequest } from './SignupRequest';
   providedIn: 'root',
 })
 export class UserService {
-  // private apiUrl = 'http://localhost:8080/users/';
-  private apiUrl = 'http://localhost:8080/api/user/';
+  // private apiUrl = 'http://localhost:8080/api/user/';
+  private apiUrl = 'https://brainconnect-backend.onrender.com/api/user/';
 
   saveUser(user: User) {
     return axios.post(this.apiUrl + 'save', user);
